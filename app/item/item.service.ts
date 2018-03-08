@@ -6,28 +6,28 @@ import { Item } from "./item";
 export class ItemService {
     private items = new Array<Item>(
         {
-            id: 1, nivel: 0, name: "SHOWS", role: "Goalkeeper", menu: new Array<Item>(
-                { id: 6, nivel: 1, name: "SHOWS->ESTILOS", role: "", menu: null }
+            id: 1,  name: "SHOWS", role: "Goalkeeper", menu: new Array<Item>(
+                { id: 6,  name: "SHOWS->ESTILOS", role: "", menu: null }
             )
         },
         {
-            id: 2, nivel: 0, name: "TEATROS", role: "Defender", menu: new Array<Item>(
-                { id: 7, nivel: 1, name: "TEATROS->ESTILOS", role: "", menu: null }
+            id: 2,  name: "TEATROS", role: "Defender", menu: new Array<Item>(
+                { id: 7,  name: "TEATROS->ESTILOS", role: "", menu: null }
             )
         },
         {
-            id: 3, nivel: 0, name: "EXPOSIÇÕES", role: "Midfielder", menu: new Array<Item>(
-                { id: 8, nivel: 1, name: "EXPOSIÇÕES->ESTILOS", role: "", menu: null }
+            id: 3,  name: "EXPOSIÇÕES", role: "Midfielder", menu: new Array<Item>(
+                { id: 8,  name: "EXPOSIÇÕES->ESTILOS", role: "", menu: null }
             )
         },
         {
-            id: 4, nivel: 0, name: "CINEMAS", role: "Midfielder", menu: new Array<Item>(
-                { id: 9, nivel: 1, name: "CINEMAS->ESTILOS", role: "", menu: null }
+            id: 4,  name: "CINEMAS", role: "Midfielder", menu: new Array<Item>(
+                { id: 9,  name: "CINEMAS->ESTILOS", role: "", menu: null }
             )
         },
         {
-            id: 5, nivel: 0, name: "REQUISIÇÕES", role: "Midfielder", menu: new Array<Item>(
-                { id: 10, nivel: 1, name: "REQUISIÇÕES DE POSTAGENS", role: "", menu: null }
+            id: 5,  name: "REQUISIÇÕES", role: "Midfielder", menu: new Array<Item>(
+                { id: 10,  name: "REQUISIÇÕES DE POSTAGENS", role: "", menu: null }
             )
         }
     );
