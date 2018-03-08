@@ -1,0 +1,9 @@
+<ActionBar [title]="item.name" class="action-bar"></ActionBar>
+<FlexboxLayout flexDirection="column" class="page">
+
+    <ListView [items]="item.menu" class="list-group">
+        <ng-template let-item="item">
+            <Button (tap)="onclick(item)" [nsRouterLink]="['/subitem', item.id]" [text]="item.name" class="btn btn-primary btn-active roundbt"></Button>
+        </ng-template>
+    </ListView>
+</FlexboxLayout>
