@@ -1,11 +1,14 @@
 <ActionBar [title]="item.name" class="action-bar">
-    <ActionItem class="fab-button-simple" ios.systemIcon="4" android.systemIcon="ic_menu_add" ios.position="right" (tap)="add()"></ActionItem>
+    <ActionItem class="fab-button-simple" visibility="{{item.iddono!=5?'visible':'hidden'}}" ios.systemIcon="4" android.systemIcon="ic_menu_add" ios.position="right" (tap)="add()"></ActionItem>
 </ActionBar>
 <StackLayout class="page">
+    <ActivityIndicator [busy]="isLoading" [visibility]="isLoading ? 'visible' : 'collapse'" horizontalAlignment="center" verticalAlignment="center"></ActivityIndicator>
 
     <ListView [items]="item.menu" class="list-group">
         <ng-template let-item="item">
-            <Button (tap)="onclick(item)" [nsRouterLink]="['/subitem', item.id]" [text]="item.name" class="btn btn-primary btn-active roundbt"></Button>
+            <Label (tap)="onclick(item)" [text]="item.name" class="btn btn-primary btn-active roundbt"></Label>
+
         </ng-template>
+
     </ListView>
 </StackLayout>

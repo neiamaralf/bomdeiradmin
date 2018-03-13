@@ -11,9 +11,20 @@ export class DbService {
  } 
 
  put(jsondata) {
-  return this.http.post(Config.apiUrl + "put.php", { jsondata }, { headers: this.getCommonHeaders()  })
+  return this.http.put(Config.apiUrl + "put.php", { jsondata }, { headers: this.getCommonHeaders()  })
   .map(res =>res);
  }
+
+ delete(params) {
+    return this.http.delete(Config.apiUrl + "delete.php?"+params,{ headers: this.getCommonHeaders()  })
+    .map(res =>res);
+   }
+
+ 
+ get(params) {
+  return this.http.get(Config.apiUrl + "get.php?"+params, { headers: this.getCommonHeaders() })
+      .map(res => res);
+}
 
  getCommonHeaders() {
   let headers = new HttpHeaders();

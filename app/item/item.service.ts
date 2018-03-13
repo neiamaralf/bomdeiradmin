@@ -6,28 +6,28 @@ import { Item } from "./item";
 export class ItemService {
     private items = new Array<Item>(
         {
-            id: 1,  name: "SHOWS", role: "Goalkeeper", menu: new Array<Item>(
-                { id: 6,  name: "SHOWS->ESTILOS", role: "", menu: null }
+            id: 1,  name: "SHOWS", menu: new Array<Item>(
+                { id: 6,iddono:1,key:"getestilos",  name: "ESTILO MUSICAL", menu: new Array<Item>() }
             )
         },
         {
-            id: 2,  name: "TEATROS", role: "Defender", menu: new Array<Item>(
-                { id: 7,  name: "TEATROS->ESTILOS", role: "", menu: null }
+            id: 2,  name: "TEATROS",  menu: new Array<Item>(
+                { id: 7,iddono:2,key:"getestilos",name: "ESTILO TEATRAL",  menu: new Array<Item>() }
             )
         },
         {
-            id: 3,  name: "EXPOSIÇÕES", role: "Midfielder", menu: new Array<Item>(
-                { id: 8,  name: "EXPOSIÇÕES->ESTILOS", role: "", menu: null }
+            id: 3,  name: "EXPOSIÇÕES",  menu: new Array<Item>(
+                { id: 8,iddono:3,key:"getestilos",name: "ESTILO DE EXPOSIÇÃO",  menu: new Array<Item>() }
             )
         },
         {
-            id: 4,  name: "CINEMAS", role: "Midfielder", menu: new Array<Item>(
-                { id: 9,  name: "CINEMAS->ESTILOS", role: "", menu: null }
+            id: 4,  name: "CINEMAS", menu: new Array<Item>(
+                { id: 9,iddono:4,key:"getestilos",name: "ESTILO DE FILME", menu: new Array<Item>() }
             )
         },
         {
-            id: 5,  name: "REQUISIÇÕES", role: "Midfielder", menu: new Array<Item>(
-                { id: 10,  name: "REQUISIÇÕES DE POSTAGENS", role: "", menu: null }
+            id: 5,  name: "REQUISIÇÕES",  menu: new Array<Item>(
+                { id: 10,iddono:5,key:"getrequisicoes",name: "REQUISIÇÕES DE POSTAGENS",  menu: new Array<Item>() }
             )
         }
     );

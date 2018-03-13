@@ -1,6 +1,7 @@
 export interface Item {
     id: number;
+    iddono?:number;
+    key?:string;
     name: string;
-    role: string;
     menu:Array<Item>;
 }
