@@ -1,23 +1,24 @@
 import {Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { User } from "../../shared/user/user";
 import { UserService } from "../../shared/user/user.service";
+import { DbService } from "../../shared/db/db.service";
 import { Page } from "ui/page";
 import { Color } from "color";
 import { View } from "ui/core/view";
 import { topmost } from "ui/frame";
 import {RouterExtensions} from "nativescript-angular/router";
 
+
 @Component({
   selector: "my-app",
-  providers: [UserService],
   templateUrl:"./pages/login/login.html",
   styleUrls: ["pages/login/login-common.css", "pages/login/login.css"]
-})
+}) 
 export class LoginComponent  implements OnInit{
   isLoggingIn = true;
   @ViewChild("container") container: ElementRef;
 
-  constructor(public user:User,private routerExtensions: RouterExtensions,private userService: UserService, private page: Page) {
+  constructor(private routerExtensions: RouterExtensions,public userService: UserService, private page: Page) {
     console.log("constructor");
     this.verifytoken();
   }
@@ -30,8 +31,8 @@ export class LoginComponent  implements OnInit{
  }
 
   submit() {
-    console.log("email="+this.user.email);
-    console.log("pass="+this.user.senha);  
+    console.log("email="+this.userService.user.email);
+    console.log("pass="+this.userService.user.senha);  
     if (this.isLoggingIn) 
       this.login();
     else
@@ -39,27 +40,15 @@ export class LoginComponent  implements OnInit{
   }
   
   login() {
-   this.userService.login(this.user)
-     .subscribe(       
-       () => this.routerExtensions.navigate(["/settings"],{
-        clearHistory: true}),
-       (error) => alert("O email ou a senha estão incorretos! Tente novamente.")
-     );     
+   this.userService.login()
  } 
 
  verifytoken(){
-  this.userService.verifytoken(this.user);
+  this.userService.verifytoken();
  }
   
   signUp() {
-    this.userService.register(this.user)
-      .subscribe(
-        () => {
-          alert("Sua conta foi criada com sucesso.");
-          this.toggleDisplay();
-        },
-        (error) => alert("Unfortunately we were unable to create your account.")
-      );
+    this.userService.register(this);
   }
 
   toggleDisplay() {

@@ -1,7 +1,5 @@
 StackLayout {
-    margin-left: 30;
-    margin-right: 30;
-    padding-bottom: 15;
+    margin: 30;
     background-color: white;
 }
 

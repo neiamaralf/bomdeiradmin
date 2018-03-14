@@ -1,9 +1,9 @@
-<Page style="background-image:url('res://fogo');background-size:cover ">
+<Page style="background-image:url('res://logo');background-size:cover ">
     <StackLayout #container>
-        <Image src="res://logologin" stretch="none" horizontalAlignment="center"></Image>
+        <Image src="res://icon" stretch="none" horizontalAlignment="center"></Image>
 
-        <TextField hint="Email" keyboardType="email" [(ngModel)]="user.email" autocorrect="false" autocapitalizationType="none"></TextField>
-        <TextField hint="Senha" secure="true" [(ngModel)]="user.senha"></TextField>
+        <TextField style="background-color: white" hint="Email" keyboardType="email" [(ngModel)]="userService.user.email" autocorrect="false" autocapitalizationType="none"></TextField>
+        <TextField style="background-color: white" hint="Senha" secure="true" [(ngModel)]="userService.user.senha"></TextField>
 
         <Button [text]="isLoggingIn ? 'Entrar' : 'Cadastrar'" class="submit-button" (tap)="submit()"></Button>
         <Button [text]="isLoggingIn ? 'Cadastrar' : 'Voltar ao Login'" (tap)="toggleDisplay()"></Button>

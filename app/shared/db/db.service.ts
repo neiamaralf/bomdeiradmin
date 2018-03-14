@@ -15,6 +15,11 @@ export class DbService {
   .map(res =>res);
  }
 
+ post(jsondata) {
+  return this.http.post(Config.apiUrl + "post.php", { jsondata }, { headers: this.getCommonHeaders()  })
+  .map(res =>res);
+ }
+
  delete(params) {
     return this.http.delete(Config.apiUrl + "delete.php?"+params,{ headers: this.getCommonHeaders()  })
     .map(res =>res);

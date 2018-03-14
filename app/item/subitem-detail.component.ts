@@ -10,7 +10,6 @@ import { DbService } from "../shared/db/db.service";
 
 @Component({
     selector: "ns-subdetails",
-    providers: [DbService],
     moduleId: module.id,
     templateUrl: "./subitem-detail.component.html",
 })
@@ -28,7 +27,6 @@ export class SubItemDetailComponent implements OnInit {
     }
 
     obterlista() {
-
         this.isLoading = true;
         this.db
             .get("key=" + this.item.key + "&idcategoria=" + this.item.iddono)

@@ -1,4 +1,6 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
+
+import { NativeScriptFormsModule } from "nativescript-angular/forms";
 import { NativeScriptModule } from "nativescript-angular/nativescript.module";
 import { AppRoutingModule } from "./app.routing";
 import { AppComponent } from "./app.component";
@@ -7,7 +9,11 @@ import { ItemService } from "./item/item.service";
 import { ItemsComponent } from "./item/items.component";
 import { ItemDetailComponent } from "./item/item-detail.component";
 import { SubItemDetailComponent } from "./item/subitem-detail.component";
+import { LoginComponent } from "./pages/login/login.component";
 import { NativeScriptHttpClientModule } from "nativescript-angular/http-client";
+import { User } from "./shared/user/user";
+import { UserService } from "./shared/user/user.service";
+import { DbService } from "./shared/db/db.service";
 
 // Uncomment and add to NgModule imports if you need to use two-way binding
 // import { NativeScriptFormsModule } from "nativescript-angular/forms";
@@ -21,6 +27,7 @@ import { NativeScriptHttpClientModule } from "nativescript-angular/http-client";
     ],
     imports: [
         NativeScriptModule,
+        NativeScriptFormsModule,
         AppRoutingModule,
         NativeScriptHttpClientModule
     ],
@@ -28,10 +35,14 @@ import { NativeScriptHttpClientModule } from "nativescript-angular/http-client";
         AppComponent,
         ItemsComponent,
         ItemDetailComponent,
-        SubItemDetailComponent
+        SubItemDetailComponent,
+        LoginComponent
     ],
     providers: [
-        ItemService
+        ItemService,
+        DbService,
+        User,
+        UserService
     ],
     schemas: [
         NO_ERRORS_SCHEMA
