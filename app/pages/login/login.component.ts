@@ -4,9 +4,7 @@ import { UserService } from "../../shared/user/user.service";
 import { Page } from "ui/page";
 import { Color } from "color";
 import { View } from "ui/core/view";
-import { topmost } from "ui/frame";
 import {RouterExtensions} from "nativescript-angular/router";
-
 
 @Component({
   selector: "my-app",

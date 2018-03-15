@@ -8,21 +8,18 @@ import { User } from "./user";
 import { DbService } from "../db/db.service";
 import { Config } from "../config";
 import {
-  getBoolean,
-  setBoolean,
-  getNumber,
-  setNumber,
   getString,
   setString,
   hasKey,
   remove,
   clear
 } from "application-settings";
+import * as platformModule from "tns-core-modules/platform";
 
 @Injectable()
 export class UserService {
-  constructor(public user:User,private db: DbService, private routerExtensions: RouterExtensions) { 
-    user.goodtoken=false;
+  constructor(public user: User, private db: DbService, private routerExtensions: RouterExtensions) {
+    user.goodtoken = false;
   }
 
   register(page) {
@@ -46,10 +43,18 @@ export class UserService {
   }
 
   login() {
+
+
+
     return this.db.post({
       key: "login",
       email: this.user.email,
-      password: this.user.senha
+      password: this.user.senha,
+      DeviceModel: platformModule.device.model,
+      DeviceType: platformModule.device.deviceType,
+      OS: platformModule.device.os,
+      OSVersion: platformModule.device.osVersion,
+      SDKVersion: platformModule.device.sdkVersion
     }
     )
       .subscribe(res => {
@@ -59,7 +64,7 @@ export class UserService {
           console.log((<any>res).status);
           this.user = (<any>res).result;
           console.log("1");
-          this.saveusr();console.log("2");
+          this.saveusr(); console.log("2");
           console.log(getString("usr"));
           this.routerExtensions.navigate(["/items"], { clearHistory: true })
         }
@@ -70,7 +75,6 @@ export class UserService {
 
   saveusr() {
     setString("usr", JSON.stringify(this.user));
-    // this.loadsusr();
   }
 
   logout() {
@@ -78,13 +82,12 @@ export class UserService {
       .subscribe(res => {
         if ((<any>res).status == 'success') {
           remove('usr');
-          this.user.goodtoken=false;
+          this.user.goodtoken = false;
           this.routerExtensions.navigate(["/"], { clearHistory: true });
         } else {
-
-          console.log((<any>res).result.msg);
-        } 
-      }); 
+          alert((<any>res).result.msg);
+        }
+      });
   }
 
   verifytoken(loginpage) {
@@ -97,27 +100,27 @@ export class UserService {
     this.user.token = usr.token;
     if (this.user.email != null) {
       this.db.post({
-          key: 'asserttoken',
-          id: this.user.id,
-          token: this.user.token
-        }
+        key: 'asserttoken',
+        id: this.user.id,
+        token: this.user.token
+      }
       )
-      .subscribe(res => {
-        if ((<any>res).status == 'success') {
-          console.dir((<any>res).result);
-          //user = res.user; 
-          //this.saveusr(user);
-          this.user.goodtoken=true;
-          this.routerExtensions.navigate(["/items"], { clearHistory: true });
-          console.dir(this.user);
-        } else {
-          console.log("token inválido");
-          this.routerExtensions.navigate(["/"]);
-        }
-      });       
+        .subscribe(res => {
+          if ((<any>res).status == 'success') {
+            console.dir((<any>res).result);
+            //user = res.user; 
+            //this.saveusr(user);
+            this.user.goodtoken = true;
+            this.routerExtensions.navigate(["/items"], { clearHistory: true });
+            console.dir(this.user);
+          } else {
+            console.log("token inválido");
+            this.routerExtensions.navigate(["/"]);
+          }
+        });
     }
     else {
-      loginpage.goodtoken=false;
+      loginpage.goodtoken = false;
       this.routerExtensions.navigate(["/"]);
     }
     console.dir(usr);

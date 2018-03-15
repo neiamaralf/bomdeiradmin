@@ -1,6 +1,6 @@
 <Page [visibility]="userService.user.goodtoken?'hidden':'visible'" style="background-image:url('res://logo');background-size:cover ">
     <StackLayout #container>
-        <Image src="res://icon" stretch="none" horizontalAlignment="center"></Image>
+        <Image src="res://icon" stretch="aspectFill" height="60" width="60" horizontalAlignment="center"></Image>
 
         <TextField style="background-color: white" hint="Email" keyboardType="email" [(ngModel)]="userService.user.email" autocorrect="false" autocapitalizationType="none"></TextField>
         <TextField style="background-color: white" hint="Senha" secure="true" [(ngModel)]="userService.user.senha"></TextField>

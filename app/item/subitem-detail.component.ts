@@ -21,7 +21,7 @@ export class SubItemDetailComponent implements OnInit {
         private router: Router,
         private db: DbService
     ) {
-        //
+
     }
 
     obterlista() {
@@ -116,8 +116,6 @@ export class SubItemDetailComponent implements OnInit {
                         })
                         .subscribe(res => {
                             item.name = (<any>res).result.nome;
-                            console.dir(res);
-                            console.log((<any>res).status);
                         });
                     break;
                 case false:
@@ -127,13 +125,7 @@ export class SubItemDetailComponent implements OnInit {
 
             }
             console.log("Dialog result: " + r.result + ", text: " + r.text);
-        });
-
-        //this.ngOnInit();
-        /* this.router.navigate([
-             '/item', this.item.id,this.item.nivel
-           ])*/
-        //this.item = this.itemService.getItem(item.id,item.nivel);
+        });        
     }
 
     ngOnInit(): void {
