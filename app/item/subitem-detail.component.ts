@@ -1,10 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import * as dialogs from "ui/dialogs";
-
 import { Item } from "./item";
 import { ItemService } from "./item.service";
-
 import { DbService } from "../shared/db/db.service";
 
 

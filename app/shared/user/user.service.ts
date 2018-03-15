@@ -21,7 +21,9 @@ import {
 
 @Injectable()
 export class UserService {
-  constructor(public user:User,private db: DbService, private routerExtensions: RouterExtensions) { }
+  constructor(public user:User,private db: DbService, private routerExtensions: RouterExtensions) { 
+    user.goodtoken=false;
+  }
 
   register(page) {
     return this.db.put({
@@ -76,15 +78,16 @@ export class UserService {
       .subscribe(res => {
         if ((<any>res).status == 'success') {
           remove('usr');
+          this.user.goodtoken=false;
           this.routerExtensions.navigate(["/"], { clearHistory: true });
         } else {
 
           console.log((<any>res).result.msg);
-        }
-      });
+        } 
+      }); 
   }
 
-  verifytoken() {
+  verifytoken(loginpage) {
     if (!hasKey("usr")) return;
     var usr = JSON.parse(getString("usr"));
     console.log("usr");
@@ -104,6 +107,7 @@ export class UserService {
           console.dir((<any>res).result);
           //user = res.user; 
           //this.saveusr(user);
+          this.user.goodtoken=true;
           this.routerExtensions.navigate(["/items"], { clearHistory: true });
           console.dir(this.user);
         } else {
@@ -113,6 +117,7 @@ export class UserService {
       });       
     }
     else {
+      loginpage.goodtoken=false;
       this.routerExtensions.navigate(["/"]);
     }
     console.dir(usr);

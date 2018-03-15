@@ -1,7 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { User } from "../../shared/user/user";
 import { UserService } from "../../shared/user/user.service";
-import { DbService } from "../../shared/db/db.service";
 import { Page } from "ui/page";
 import { Color } from "color";
 import { View } from "ui/core/view";
@@ -16,6 +15,7 @@ import {RouterExtensions} from "nativescript-angular/router";
 }) 
 export class LoginComponent  implements OnInit{
   isLoggingIn = true;
+  
   @ViewChild("container") container: ElementRef;
 
   constructor(private routerExtensions: RouterExtensions,public userService: UserService, private page: Page) {
@@ -44,7 +44,7 @@ export class LoginComponent  implements OnInit{
  } 
 
  verifytoken(){
-  this.userService.verifytoken();
+  this.userService.verifytoken(this);
  }
   
   signUp() {

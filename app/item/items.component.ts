@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
-
 import { Item } from "./item";
 import { ItemService } from "./item.service";
+import { UserService } from "../shared/user/user.service";
 
 @Component({
     selector: "ns-items",
@@ -10,7 +10,13 @@ import { ItemService } from "./item.service";
 })
 export class ItemsComponent implements OnInit {
     items: Item[];
-    constructor(private itemService: ItemService) { }
+    constructor(private itemService: ItemService,private userService: UserService) {
+
+    }
+
+    logout(){
+        this.userService.logout();
+    }
 
     ngOnInit(): void {
         this.items = this.itemService.getItems();

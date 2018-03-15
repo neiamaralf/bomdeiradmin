@@ -1,4 +1,4 @@
-<Page style="background-image:url('res://logo');background-size:cover ">
+<Page [visibility]="userService.user.goodtoken?'hidden':'visible'" style="background-image:url('res://logo');background-size:cover ">
     <StackLayout #container>
         <Image src="res://icon" stretch="none" horizontalAlignment="center"></Image>
 
