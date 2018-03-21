@@ -4,6 +4,7 @@ import * as dialogs from "ui/dialogs";
 import { Item } from "./item";
 import { ItemService } from "./item.service";
 import { DbService } from "../shared/db/db.service";
+import { UserService } from "../shared/user/user.service";
 
 
 @Component({
@@ -19,7 +20,7 @@ export class SubItemDetailComponent implements OnInit {
         private itemService: ItemService,
         private route: ActivatedRoute,
         private router: Router,
-        private db: DbService
+        private db: DbService, private userService: UserService
     ) {
 
     }

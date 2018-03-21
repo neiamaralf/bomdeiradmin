@@ -13,6 +13,7 @@ export class ItemsComponent implements OnInit {
     constructor(private itemService: ItemService, private userService: UserService) {
         console.log("user");
         console.dir(userService.user);
+        itemService.inititems();
 
     }
 
