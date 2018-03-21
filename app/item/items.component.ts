@@ -11,6 +11,8 @@ import { UserService } from "../shared/user/user.service";
 export class ItemsComponent implements OnInit {
     items: Item[];
     constructor(private itemService: ItemService, private userService: UserService) {
+        console.log("user");
+        console.dir(userService.user);
 
     }
 

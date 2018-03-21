@@ -3,5 +3,6 @@ export class User {
   senha?: string;
   id:string;
   token:string;
+  super:number;
   goodtoken=false;
 }

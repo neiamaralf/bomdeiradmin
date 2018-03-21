@@ -26,7 +26,8 @@ export class UserService {
     return this.db.put({
       key: "adduser",
       email: this.user.email,
-      password: this.user.senha
+      password: this.user.senha,
+      super:this.user.super
     }
     )
       .subscribe(res => {
@@ -43,9 +44,6 @@ export class UserService {
   }
 
   login() {
-
-
-
     return this.db.post({
       key: "login",
       email: this.user.email,
@@ -61,11 +59,9 @@ export class UserService {
         if ((<any>res).status == 'success') {
           Config.token = (<any>res).result.token
           console.dir(res);
-          console.log((<any>res).status);
           this.user = (<any>res).result;
-          console.log("1");
-          this.saveusr(); console.log("2");
-          console.log(getString("usr"));
+          console.dir(this.user);
+          this.saveusr();
           this.routerExtensions.navigate(["/items"], { clearHistory: true })
         }
         else
@@ -95,9 +91,7 @@ export class UserService {
     var usr = JSON.parse(getString("usr"));
     console.log("usr");
     console.dir(usr);
-    this.user.id = usr.id;
-    this.user.email = usr.email;
-    this.user.token = usr.token;
+    this.user = (<any>usr);
     if (this.user.email != null) {
       this.db.post({
         key: 'asserttoken',
@@ -108,8 +102,6 @@ export class UserService {
         .subscribe(res => {
           if ((<any>res).status == 'success') {
             console.dir((<any>res).result);
-            //user = res.user; 
-            //this.saveusr(user);
             this.user.goodtoken = true;
             this.routerExtensions.navigate(["/items"], { clearHistory: true });
             console.dir(this.user);
@@ -123,7 +115,6 @@ export class UserService {
       loginpage.goodtoken = false;
       this.routerExtensions.navigate(["/"]);
     }
-    console.dir(usr);
   }
 
   getCommonHeaders() {

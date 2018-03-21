@@ -24,13 +24,18 @@ case "logout":
  break;
 case "login":
   $email=$json_obj->{'jsondata'}->{'email'};
-  $password=$json_obj->{'jsondata'}->{'password'};
+  $password=$json_obj->{'jsondata'}->{'password'};  
+  $DeviceModel=$json_obj->{'jsondata'}->{'DeviceModel'};
+  $DeviceType=$json_obj->{'jsondata'}->{'DeviceType'};
+  $OS=$json_obj->{'jsondata'}->{'OS'};
+  $OSVersion=$json_obj->{'jsondata'}->{'OSVersion'};
+  $SDKVersion=$json_obj->{'jsondata'}->{'SDKVersion'};
   if($password!=""&&$email!="") {
     try {
       $stmt=$pdo->query("SELECT id FROM admins WHERE email='$email' AND senha='$password'");
       if($row=$stmt->fetch(PDO::FETCH_OBJ)) {
         $token=generateRandomString();
-        $update="INSERT INTO tokens(token,device, userid) VALUES('$token','$device', $row->id)";
+        $update="INSERT INTO tokens(token, userid,data,DeviceModel,DeviceType,OS,OSVersion,SDKVersion) VALUES('$token',$row->id,now(),'$DeviceModel','$DeviceType','$OS','$OSVersion','$SDKVersion')";
         $qr=$pdo->query($update);
         if($qr) {
           $st="SELECT u.id,u.email,u.super,t.token FROM admins AS u, tokens AS t WHERE u.id=$row->id AND t.token='$token'";

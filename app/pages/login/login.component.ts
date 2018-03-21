@@ -1,10 +1,10 @@
 import {Component, ElementRef, OnInit, ViewChild } from "@angular/core";
-import { User } from "../../shared/user/user";
 import { UserService } from "../../shared/user/user.service";
 import { Page } from "ui/page";
 import { Color } from "color";
 import { View } from "ui/core/view";
 import {RouterExtensions} from "nativescript-angular/router";
+import * as switchModule from "tns-core-modules/ui/switch";
 
 @Component({
   selector: "my-app",
@@ -13,6 +13,7 @@ import {RouterExtensions} from "nativescript-angular/router";
 }) 
 export class LoginComponent  implements OnInit{
   isLoggingIn = true;
+  admin=false;
   
   @ViewChild("container") container: ElementRef;
 
@@ -42,6 +43,7 @@ export class LoginComponent  implements OnInit{
  } 
 
  verifytoken(){
+  this.userService.user.super=this.admin?1:2;
   this.userService.verifytoken(this);
  }
   
@@ -53,7 +55,7 @@ export class LoginComponent  implements OnInit{
     this.isLoggingIn = !this.isLoggingIn;
     let container = <View>this.container.nativeElement;
     container.animate({
-      backgroundColor: this.isLoggingIn ? new Color("white") : new Color("#301217"),
+      backgroundColor: this.isLoggingIn ? new Color("white") : new Color("#601217"),
       duration: 200
     });
   }
