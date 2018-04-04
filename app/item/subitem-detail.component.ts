@@ -4,7 +4,7 @@ import * as dialogs from "ui/dialogs";
 import {StackLayout} from "ui/layouts/stack-layout";
 import {Button} from "tns-core-modules/ui/button";
 import * as observable from "tns-core-modules/data/observable";
-import {TextView} from "tns-core-modules/ui/text-view";
+import { TextField } from "ui/text-field";
 import { Item } from "./item";
 import { ItemService } from "./item.service";
 import { DbService } from "../shared/db/db.service";
@@ -16,6 +16,8 @@ import { topmost, NavigationEntry } from "tns-core-modules/ui/frame";
 import * as listPickerModule from "tns-core-modules/ui/list-picker";
 import { getCssFileName, start } from "application";
 import { Color } from "color";
+import { fromObject } from "data/observable";
+import { BindingOptions } from "ui/core/bindable";
 
 
 @Component({
@@ -26,6 +28,7 @@ import { Color } from "color";
 export class SubItemDetailComponent implements OnInit {
     item: Item;
     isLoading = true;
+    
 
     constructor(
         private itemService: ItemService,
@@ -81,6 +84,12 @@ export class SubItemDetailComponent implements OnInit {
         });
     }
 
+    cepIsOk(cep):any {
+       return this.db
+        .geturl("https://viacep.com.br/ws/"+cep+"/json/");
+        
+    }
+
     add() {
         console.dir(this.item);
         var title = "INSERIR " + this.item.name;
@@ -89,27 +98,37 @@ export class SubItemDetailComponent implements OnInit {
 
         if ((this.userService.user.super == 1)&&(this.item.key=="locais")) {
             const topFrame = topmost();
-            const currentPage = topFrame.currentPage;
+            const currentPage = topFrame.currentPage;         
             
             let cepPage: Page;
+            var curestado:any;
+            var __this=this;
             var estados: any[]=[];
             this.listaUFs(estados);
             console.dir(estados);
-            const pageFactory = function (): Page {
+            const pageFactory = function (): Page {                
                 cepPage = new Page();
                 cepPage.className="page";
-                cepPage.css=".page TextView{color:white} ";
                 cepPage.actionBar.title="INSERIR LOCAL";
                 cepPage.actionBar.color=new Color("#ffffff");
-                cepPage.actionBar.className="page";
-                
+                cepPage.actionBar.className="page";                
                 var stackLayout = new StackLayout();
-                var txtcep = new TextView();
+                var txtcep = new TextField();
                 txtcep.text = "";
-                txtcep.color=new Color("#ffffff");
                 txtcep.margin=10;
                 txtcep.backgroundColor=new Color("#acacac");
-                txtcep.hint = "Digite o CEP";
+                txtcep.hint = "Digite o CEP (só números)";
+                const source = fromObject({
+                    cep: ""
+                });
+                const textFieldBindingOptions: BindingOptions = {
+                    sourceProperty: "cep",
+                    targetProperty: "text",
+                    twoWay: true
+                };
+                txtcep.bind(textFieldBindingOptions, source);
+                txtcep.keyboardType="number";
+                txtcep.maxLength=8;
                 stackLayout.addChild(txtcep);
                 var lbl = new Label();
                 lbl.on(Button.tapEvent, function (args: observable.EventData) {
@@ -117,11 +136,9 @@ export class SubItemDetailComponent implements OnInit {
                     const pesqCepFactory = function (): Page {
                         pesqCepPage = new Page();
                         pesqCepPage.actionBar.title="BUSCAR CEP";
-                        cepPage.actionBar.color=new Color("#ffffff");
+                        pesqCepPage.actionBar.color=new Color("#ffffff");
                         pesqCepPage.className="page";
-                        pesqCepPage.css=".page TextView{color:white;padding:10} ";
                         pesqCepPage.actionBar.className="page";
-                        pesqCepPage.effectivePaddingBottom=10;
                         
                         var stackLayout = new StackLayout();
                        
@@ -131,21 +148,19 @@ export class SubItemDetailComponent implements OnInit {
                         pickUF.backgroundColor=new Color("#0c0c0c");
                         pickUF.items = estados;
                         pickUF.on("selectedIndexChange", function (arg) {
-                            console.dir((<any>arg.object).items[(<any>arg.object).selectedIndex]);
+                            curestado=(<any>arg.object).items[(<any>arg.object).selectedIndex];
+                            console.dir(curestado);
                         });
                         stackLayout.addChild(pickUF);
 
-
-                        var txtcep = new TextView();
+                        var txtcep = new TextField();
                         txtcep.hint = "Cidade";
-                        txtcep.color=new Color("#ffffff");
                         txtcep.padding=10;
                         txtcep.margin=10;
                         txtcep.backgroundColor=new Color("#acacac");
                         stackLayout.addChild(txtcep);
-                        var txtcep = new TextView();
-                        txtcep.hint = "Rua";
-                        txtcep.color=new Color("#ffffff");
+                        var txtcep = new TextField();
+                        txtcep.hint = "Endereço";
                         txtcep.margin=10;
                         txtcep.backgroundColor=new Color("#acacac");
                         stackLayout.addChild(txtcep);
@@ -174,6 +189,44 @@ export class SubItemDetailComponent implements OnInit {
                 var lbl = new Label();
                 lbl.text = "Continuar";
                 lbl.className="btn btn-primary btn-active roundbt";
+                lbl.on(Button.tapEvent, function (args: observable.EventData) {
+                    __this.cepIsOk(source.get("cep"))
+                    .subscribe(res => {     
+                        console.dir(<any>res);      
+                        const bindlocal = fromObject(<any>res);
+                         
+                        let cadastroPage: Page;
+                        const cadastroFactory = function (): Page {                
+                            cadastroPage = new Page();
+                            cadastroPage.className="page";
+                            cadastroPage.actionBar.title="INSERIR LOCAL";
+                            cadastroPage.actionBar.color=new Color("#ffffff");
+                            cadastroPage.actionBar.className="page";                
+                            var stackLayout = new StackLayout();
+                            var txt = new TextField();
+                            txt.text = "";
+                            txt.margin=10;
+                            txt.backgroundColor=new Color("#acacac");      
+                            const textFieldBindingOptions: BindingOptions = {
+                                sourceProperty: "cep",
+                                targetProperty: "text",
+                                twoWay: true
+                            };     
+                            txt.bind(textFieldBindingOptions, bindlocal);
+                            txt.keyboardType="number";
+                            txt.maxLength=8;
+                            stackLayout.addChild(txt); 
+                            cadastroPage.content = stackLayout;
+                            return cadastroPage;
+                        };
+                        const navEntry = {
+                            create: cadastroFactory,
+                            animated: false
+                        };
+                        topFrame.navigate(navEntry);
+                              
+                     });
+                });
                 stackLayout.addChild(lbl);
                 
                 cepPage.content = stackLayout;
@@ -185,6 +238,7 @@ export class SubItemDetailComponent implements OnInit {
                 animated: false
             };
             topFrame.navigate(navEntry);
+            
 
         }
         else

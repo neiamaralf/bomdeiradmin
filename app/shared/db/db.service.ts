@@ -31,6 +31,11 @@ export class DbService {
       .map(res => res);
   }
 
+  geturl(url) {
+    return this.http.get(url, { headers: this.getCommonHeaders() })
+      .map(res => res);
+  }
+
   getCommonHeaders() {
     let headers = new HttpHeaders();
     headers.append("Content-Type", "application/json");
