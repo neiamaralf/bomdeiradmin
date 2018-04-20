@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
 
   @ViewChild("container") container: ElementRef;
 
-  constructor(private routerExtensions: RouterExtensions, public userService: UserService, private page: Page) {
+  constructor( public userService: UserService, private page: Page) {
     this.verifytoken();
   }
 

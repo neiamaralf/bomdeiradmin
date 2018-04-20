@@ -3,7 +3,7 @@
  include 'conexao.php';
  $key= $_REQUEST['key'];
  switch($key) {
-  case 'getestilos':
+  case 'estilos':
   $id=$_REQUEST['id'];
   $sql="DELETE FROM estilos  WHERE  id=$id";
   $stmt=$pdo->query($sql);
@@ -11,7 +11,7 @@
    echo json_encode(array('status'=>'success'));
   } 
   break;
-  case 'getartistas':
+  case 'artistas':
   $id=$_REQUEST['id'];
   $sql="DELETE FROM artistas  WHERE  id=$id";
   $stmt=$pdo->query($sql);

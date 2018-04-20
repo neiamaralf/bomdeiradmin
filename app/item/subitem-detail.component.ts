@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
+import { RouterExtensions } from "nativescript-angular/router";
 import * as dialogs from "ui/dialogs";
 import {StackLayout} from "ui/layouts/stack-layout";
 import {Button} from "tns-core-modules/ui/button";
@@ -19,6 +20,9 @@ import { Color } from "color";
 import { fromObject } from "data/observable";
 import { BindingOptions } from "ui/core/bindable";
 
+import {ListView} from "ui/list-view"
+import {CepComponent} from "./cep"
+
 
 @Component({
     selector: "ns-subdetails",
@@ -34,9 +38,15 @@ export class SubItemDetailComponent implements OnInit {
         private itemService: ItemService,
         private route: ActivatedRoute,
         private router: Router,
+        private routerextensions: RouterExtensions,
         private db: DbService,
-        private userService: UserService
+        private userService: UserService,
+        private page: Page,
+        private routerExtensions: RouterExtensions
     ) {
+        this.page.on("navigatedTo", () => {
+            this.obterlista();
+           });
 
     }
 
@@ -45,16 +55,22 @@ export class SubItemDetailComponent implements OnInit {
         this.db
             .get("key=" + this.item.key + "&idcategoria=" + this.item.iddono + "&idadmin=" + this.userService.user.id)
             .subscribe(res => {
-                console.dir(res);
-                console.log((<any>res).status);
+               // console.dir(res);
+               // console.log((<any>res).status);
+                
+                
                 this.item.menu = [];
-                if (res != null)
+                if (res != null){
                     (<any>res).result.forEach(row => {
                         this.item.menu.push({
                             key: (<any>res).key, name: row.nome, id: row.id, menu: null,
 
                         });
                     });
+                    //this.refresh();
+                    console.log("item...");
+                    console.dir(this.item);
+                }
 
                 this.isLoading = false;
             });
@@ -90,6 +106,43 @@ export class SubItemDetailComponent implements OnInit {
         
     }
 
+    createTxtField(srcprop,kbtype,maxleng,bindoj,enabled,hint){
+        var txt = new TextField();
+        txt.marginLeft=10;
+        txt.marginRight=10;
+        txt.marginBottom=1;
+        txt.marginTop=1;
+        txt.backgroundColor=new Color("#ffffff");      
+        const textFieldBindingOptions: BindingOptions = {
+            sourceProperty: srcprop,
+            targetProperty: "text",
+            twoWay: true
+        };     
+        txt.bind(textFieldBindingOptions, bindoj);
+        txt.hint=hint;
+        txt.height=40;
+        txt.isEnabled=enabled;
+        if(kbtype!="")
+         txt.keyboardType=kbtype;
+        if(maxleng!=-1)
+         txt.maxLength=maxleng;
+        return txt;
+    }
+
+    createLabel(srcprop,bindoj){
+        var txt = new Label();
+        const textFieldBindingOptions: BindingOptions = {
+            sourceProperty: srcprop,
+            targetProperty: "text",
+            twoWay: true
+        };     
+        txt.bind(textFieldBindingOptions, bindoj);
+        txt.marginLeft=10;
+        txt.marginRight=10;
+        txt.color=new Color("#ffffff"); 
+        return txt;
+    }
+
     add() {
         console.dir(this.item);
         var title = "INSERIR " + this.item.name;
@@ -98,38 +151,26 @@ export class SubItemDetailComponent implements OnInit {
 
         if ((this.userService.user.super == 1)&&(this.item.key=="locais")) {
             const topFrame = topmost();
-            const currentPage = topFrame.currentPage;         
-            
+            const currentPage = topFrame.currentPage;   
             let cepPage: Page;
             var curestado:any;
             var __this=this;
             var estados: any[]=[];
             this.listaUFs(estados);
             console.dir(estados);
+            this.routerExtensions.navigate(["/cep"], { clearHistory: false });
+            return;/*
             const pageFactory = function (): Page {                
                 cepPage = new Page();
                 cepPage.className="page";
                 cepPage.actionBar.title="INSERIR LOCAL";
                 cepPage.actionBar.color=new Color("#ffffff");
                 cepPage.actionBar.className="page";                
-                var stackLayout = new StackLayout();
-                var txtcep = new TextField();
-                txtcep.text = "";
-                txtcep.margin=10;
-                txtcep.backgroundColor=new Color("#acacac");
-                txtcep.hint = "Digite o CEP (só números)";
+                var stackLayout = new StackLayout();                
                 const source = fromObject({
                     cep: ""
-                });
-                const textFieldBindingOptions: BindingOptions = {
-                    sourceProperty: "cep",
-                    targetProperty: "text",
-                    twoWay: true
-                };
-                txtcep.bind(textFieldBindingOptions, source);
-                txtcep.keyboardType="number";
-                txtcep.maxLength=8;
-                stackLayout.addChild(txtcep);
+                });                
+                stackLayout.addChild(__this.createTxtField("cep","number",8,source,true,"Digite o CEP (só números)"));
                 var lbl = new Label();
                 lbl.on(Button.tapEvent, function (args: observable.EventData) {
                     let pesqCepPage: Page;
@@ -153,21 +194,18 @@ export class SubItemDetailComponent implements OnInit {
                         });
                         stackLayout.addChild(pickUF);
 
-                        var txtcep = new TextField();
-                        txtcep.hint = "Cidade";
-                        txtcep.padding=10;
-                        txtcep.margin=10;
-                        txtcep.backgroundColor=new Color("#acacac");
-                        stackLayout.addChild(txtcep);
-                        var txtcep = new TextField();
-                        txtcep.hint = "Endereço";
-                        txtcep.margin=10;
-                        txtcep.backgroundColor=new Color("#acacac");
-                        stackLayout.addChild(txtcep);
+                        const cepsearch = fromObject({
+                            cidade: "",
+                            endereco:""
+                        });
+                        stackLayout.addChild(__this.createTxtField("cidade","",-1,cepsearch,true,"Cidade"));
+                        stackLayout.addChild(__this.createTxtField("endereco","",-1,cepsearch,true,"Endereço"));                       
                         var lbl = new Button();
                         lbl.className="btn btn-primary btn-active roundbt";
                         lbl.on(Button.tapEvent, function (args: observable.EventData) {
-                            // Do something
+                            console.dir(curestado);
+                            console.log(cepsearch.get("cidade"));
+                            console.log(cepsearch.get("endereco"));
                         });
                         
                         lbl.text = "Pesquisar CEP";
@@ -202,20 +240,76 @@ export class SubItemDetailComponent implements OnInit {
                             cadastroPage.actionBar.title="INSERIR LOCAL";
                             cadastroPage.actionBar.color=new Color("#ffffff");
                             cadastroPage.actionBar.className="page";                
-                            var stackLayout = new StackLayout();
-                            var txt = new TextField();
-                            txt.text = "";
-                            txt.margin=10;
-                            txt.backgroundColor=new Color("#acacac");      
-                            const textFieldBindingOptions: BindingOptions = {
-                                sourceProperty: "cep",
-                                targetProperty: "text",
-                                twoWay: true
-                            };     
-                            txt.bind(textFieldBindingOptions, bindlocal);
-                            txt.keyboardType="number";
-                            txt.maxLength=8;
-                            stackLayout.addChild(txt); 
+                            var stackLayout = new StackLayout();     
+                            const binddescnum = fromObject({
+                                nome: "",
+                                numero:"",
+                                fone:'',
+                                email:'',
+                                site:''
+                            });
+                            stackLayout.addChild(__this.createTxtField("nome","",-1,binddescnum,true,"descrição"));
+                            stackLayout.addChild(__this.createTxtField("numero","",-1,binddescnum,true,"número")); 
+                            stackLayout.addChild(__this.createTxtField("complemento","",-1,bindlocal,true,"complemento")); 
+                            stackLayout.addChild(__this.createTxtField("fone","phone",-1,binddescnum,true,"fone"));
+                            stackLayout.addChild(__this.createTxtField("email","email",-1,binddescnum,true,"email")); 
+                            stackLayout.addChild(__this.createTxtField("site","url",-1,bindlocal,true,"site")); 
+                            
+                            stackLayout.addChild(__this.createLabel("cep",bindlocal));
+                            stackLayout.addChild(__this.createLabel("logradouro",bindlocal)); 
+                            stackLayout.addChild(__this.createLabel("bairro",bindlocal)); 
+                            stackLayout.addChild(__this.createLabel("localidade",bindlocal)); 
+                            stackLayout.addChild(__this.createLabel("uf",bindlocal)); 
+                            var lbl = new Button();
+                            lbl.className="btn btn-primary btn-active roundbt";
+                            lbl.on(Button.tapEvent, function (args: observable.EventData) {
+                                console.log(binddescnum.get("nome"));
+                                console.log(binddescnum.get("numero"));
+                                console.log(binddescnum.get("fone"));
+                                console.log(binddescnum.get("email"));
+                                console.log(binddescnum.get("site"));
+                                console.log(bindlocal.get("complemento"));
+                                console.log(bindlocal.get("cep"));
+                                console.log(bindlocal.get("logradouro"));
+                                console.log(bindlocal.get("bairro"));
+                                console.log(bindlocal.get("localidade"));
+                                console.log(bindlocal.get("uf"));
+
+                                __this.db
+                                .put({
+                                    op: 'adicionar',
+                                    key: 'locais',
+                                    nome: binddescnum.get("nome"),
+                                    numero: binddescnum.get("numero"),
+                                    fone: binddescnum.get("fone"),
+                                    email: binddescnum.get("email"),
+                                    site: binddescnum.get("site"),
+                                    complemento: bindlocal.get("complemento"),
+                                    cep: bindlocal.get("cep"),
+                                    logradouro: bindlocal.get("logradouro"),
+                                    bairro: bindlocal.get("bairro"),
+                                    localidade: bindlocal.get("localidade"),
+                                    uf: bindlocal.get("uf"),
+                                    idcategoria: __this.item.iddono,
+                                    idadmin: __this.userService.user.id
+                                })
+                                .subscribe(res => {
+                                    topFrame.goBack();
+                                    topFrame.goBack();
+                                    //topFrame.navigate({ moduleName: "SubItemDetailComponent", clearHistory: true });
+                                    //topFrame.navigate("subitem-detail.component");
+                                    //__this.obterlista();
+                                    //topFrame.initNativeView();
+                                   // __this.routerextensions.navigate(["/subitem/"+__this.item.id.toString()], { clearHistory: true });
+                                   // __this.item.menu.push({
+                                    //    key: (<any>res).key, name: (<any>res).result.nome, id: (<any>res).result.id, menu: null,
+                                    //  });
+                                    console.dir(res);
+                                    console.log((<any>res).status);
+                                });
+                            });                            
+                            lbl.text = "Inserir local";
+                            stackLayout.addChild(lbl);
                             cadastroPage.content = stackLayout;
                             return cadastroPage;
                         };
@@ -238,7 +332,7 @@ export class SubItemDetailComponent implements OnInit {
                 animated: false
             };
             topFrame.navigate(navEntry);
-            
+            */
 
         }
         else
@@ -323,10 +417,20 @@ export class SubItemDetailComponent implements OnInit {
         });
     }
 
+    public refresh(){
+
+
+        //do something
+        var listview:ListView=<ListView> this.page.getViewById("lvId");
+        listview.refresh();
+    }
+
     ngOnInit(): void {
+        console.log("ngOnInit");
         var id: number = this.route.snapshot.params["id"]; console.log(id);
         this.item = this.itemService.getItem(id); console.dir(this.item);
         this.obterlista();
+        
 
     }
 }
