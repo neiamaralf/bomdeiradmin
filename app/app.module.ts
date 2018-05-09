@@ -10,6 +10,8 @@ import { ItemsComponent } from "./item/items.component";
 import { ItemDetailComponent } from "./item/item-detail.component";
 import { SubItemDetailComponent } from "./item/subitem-detail.component";
 import { CepComponent } from "./item/cep";
+import { BuscaCepComponent } from "./item/buscacep";
+
 
 import { LoginComponent } from "./pages/login/login.component";
 import { NativeScriptHttpClientModule } from "nativescript-angular/http-client";
@@ -39,7 +41,8 @@ import { DbService } from "./shared/db/db.service";
         ItemDetailComponent,
         SubItemDetailComponent,
         LoginComponent,
-        CepComponent
+        CepComponent,
+        BuscaCepComponent
     ],
     providers: [
         ItemService,

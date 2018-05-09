@@ -3,11 +3,11 @@ import { RouterExtensions } from "nativescript-angular/router";
 
 
 @Component({
- selector: "ns-cep",
+ selector: "ns-buscacep",
  moduleId: module.id,
- templateUrl: "./cep.html",
+ templateUrl: "./buscacep.html",
 })
-export class CepComponent{
+export class BuscaCepComponent{
  cep: any;
 
  constructor( private routerExtensions: RouterExtensions) { }

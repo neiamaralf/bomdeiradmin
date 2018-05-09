@@ -2,6 +2,6 @@
 </ActionBar>
 <StackLayout class="page">
     <TextField style="background-color: white" hint="Email" keyboardType="number" [(ngModel)]="cep"></TextField>
-
-
+    <Button (tap)="buscacep()" text="Buscar CEP"></Button>
+    <Button (tap)="continuar()" text="Continuar"></Button>
 </StackLayout>
