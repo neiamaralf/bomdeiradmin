@@ -101,6 +101,7 @@ export class SubItemDetailComponent {
 
                         });
                     });
+                console.dir(array);
 
                 this.isLoading = false;
             });
@@ -166,7 +167,6 @@ export class SubItemDetailComponent {
             var __this = this;
             var estados: any[] = [];
             this.listaUFs(estados);
-            console.dir(estados);
             const pageFactory = function (): Page {
                 cepPage = new Page();
                 cepPage.className = "page";
@@ -259,7 +259,9 @@ export class SubItemDetailComponent {
                         create: pesqCepFactory,
                         animated: false
                     };
-                    topFrame.navigate(navEntry);
+
+                    __this.router.navigate(["/buscacep"]);
+                    //topFrame.navigate(navEntry);
                 });
                 lbl.text = "Pesquisar CEP";
                 lbl.className = "btn btn-primary btn-active roundbt";
@@ -362,7 +364,8 @@ export class SubItemDetailComponent {
                 create: pageFactory,
                 animated: false
             };
-            topFrame.navigate(navEntry);
+            __this.router.navigate(["/cep/"+this.item.iddono+"/"+this.userService.user.id]);
+            //topFrame.navigate(navEntry);
 
         }
         else

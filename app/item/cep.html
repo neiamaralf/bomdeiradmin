@@ -1,7 +1,7 @@
-<ActionBar title="INSERIR LOCAL" class="action-bar">
+<ActionBar title="VERIFICAR CEP" class="action-bar">
 </ActionBar>
 <StackLayout class="page">
-    <TextField style="background-color: white" hint="Email" keyboardType="number" [(ngModel)]="cep"></TextField>
-    <Button (tap)="buscacep()" text="Buscar CEP"></Button>
-    <Button (tap)="continuar()" text="Continuar"></Button>
+    <TextField style="background-color: white" hint="Digite o CEP (só números)" keyboardType="number" [(ngModel)]="cep"></TextField>
+    <Label (tap)="buscacep()" text="Buscar CEP" class="btn btn-primary btn-active roundbt"></Label>
+    <Label (tap)="continuar()" text="Continuar" class="btn btn-primary btn-active roundbt"></Label>
 </StackLayout>

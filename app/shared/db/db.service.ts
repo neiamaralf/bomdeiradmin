@@ -27,13 +27,12 @@ export class DbService {
 
 
   get(params) {
-    return this.http.get(Config.apiUrl + "get.php?" + params, { headers: this.getCommonHeaders() })
-      .map(res => res);
+    
+    return this.http.get(Config.apiUrl + "get.php?" + params, { headers: this.getCommonHeaders() });
   }
 
   geturl(url) {
-    return this.http.get(url, { headers: this.getCommonHeaders() })
-      .map(res => res);
+    return this.http.get(url, { headers: this.getCommonHeaders() });
   }
 
   getCommonHeaders() {

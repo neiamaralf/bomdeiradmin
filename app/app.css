@@ -71,3 +71,7 @@ refer to http://docs.nativescript.org/ui/theme.
     color: white;
     background-color: #CB1D00;
 }
+
+Label {
+    color: white;
+}

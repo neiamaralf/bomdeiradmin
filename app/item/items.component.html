@@ -9,7 +9,6 @@
             <StackLayout orientation="horizontal">
                 <Label [nsRouterLink]="['/item', item.id]" width="90%" style="z-index:0;margin-right: -20;" [text]="item.name" class="btn btn-primary btn-active roundbt"></Label>
                 <Button verticalAlignment="top" visibility="{{item.id==5?'visible':'hidden'}}" width="30" height="30" text="5" class="btn-primary btn-active roundbt1"></Button>
-
             </StackLayout>
         </ng-template>
     </ListView>

@@ -11,6 +11,7 @@ import { ItemDetailComponent } from "./item/item-detail.component";
 import { SubItemDetailComponent } from "./item/subitem-detail.component";
 import { CepComponent } from "./item/cep";
 import { BuscaCepComponent } from "./item/buscacep";
+import { LocaisComponent } from "./item/locais";
 
 
 import { LoginComponent } from "./pages/login/login.component";
@@ -42,7 +43,8 @@ import { DbService } from "./shared/db/db.service";
         SubItemDetailComponent,
         LoginComponent,
         CepComponent,
-        BuscaCepComponent
+        BuscaCepComponent,
+        LocaisComponent
     ],
     providers: [
         ItemService,

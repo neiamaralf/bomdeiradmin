@@ -8,14 +8,16 @@ import { SubItemDetailComponent } from "./item/subitem-detail.component";
 import { LoginComponent } from "./pages/login/login.component";
 import { CepComponent } from "./item/cep";
 import { BuscaCepComponent } from "./item/buscacep";
+import { LocaisComponent } from "./item/locais";
 
 const routes: Routes = [
     { path: "", component: LoginComponent },
     { path: "items", component: ItemsComponent },
     { path: "item/:id", component: ItemDetailComponent },
     { path: "subitem/:id", component: SubItemDetailComponent },
-    { path: "cep", component: CepComponent },
-    { path: "buscacep", component: BuscaCepComponent },
+    { path: "cep/:idcategoria/:idadmin", component: CepComponent },
+    { path: "buscacep/:idcategoria/:idadmin", component: BuscaCepComponent },
+    { path: "locais/:acao/:cep/:logradouro/:bairro/:localidade/:uf/:idcategoria/:idadmin", component: LocaisComponent },
 ];
 
 @NgModule({

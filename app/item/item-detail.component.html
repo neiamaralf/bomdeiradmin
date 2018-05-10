@@ -3,7 +3,7 @@
 
     <ListView [items]="item.menu" class="list-group">
         <ng-template let-item="item">
-            <Label (tap)="onclick(item)" [nsRouterLink]="['/subitem', item.id]" [text]="item.name" class="btn btn-primary btn-active roundbt"></Label>
+            <Label [nsRouterLink]="['/subitem', item.id]" [text]="item.name" class="btn btn-primary btn-active roundbt"></Label>
         </ng-template>
     </ListView>
 </FlexboxLayout>
