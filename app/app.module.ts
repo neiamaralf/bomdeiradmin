@@ -10,6 +10,7 @@ import { ItemsComponent } from "./item/items.component";
 import { ItemDetailComponent } from "./item/item-detail.component";
 import { SubItemDetailComponent } from "./item/subitem-detail.component";
 import { CepComponent } from "./item/cep";
+import { EventosComponent } from "./item/eventos";
 import { BuscaCepComponent } from "./item/buscacep";
 import { LocaisComponent } from "./item/locais";
 
@@ -43,6 +44,7 @@ import { DbService } from "./shared/db/db.service";
         SubItemDetailComponent,
         LoginComponent,
         CepComponent,
+        EventosComponent,
         BuscaCepComponent,
         LocaisComponent
     ],

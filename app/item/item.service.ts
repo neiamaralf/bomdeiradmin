@@ -53,27 +53,27 @@ export class ItemService {
                     id: 1, name: "SHOWS", menu: new Array<Item>(
                         { id: 6,iddono: 1, key: "artistas", name: "MÚSICOS\\BANDAS", menu: new Array<Item>() },
                         { id: 7,iddono: 1, key: "locais", name: "LOCAIS", menu: new Array<Item>() },
-                        { id: 8,iddono: 1, key: "geteventos",name: "EVENTOS", menu: new Array<Item>() }
+                        { id: 8,iddono: 1, key: "eventos",name: "EVENTOS", menu: new Array<Item>() }
                     )
                 },
                 {
                     id: 2, name: "TEATROS", menu: new Array<Item>(
                         { id: 9,iddono: 2, key: "artistas", name: "GRUPOS TEATRAIS", menu: new Array<Item>() },
                         { id: 10,iddono: 2, key: "locais", name: "LOCAIS", menu: new Array<Item>() },
-                        { id: 11,iddono: 2, key: "geteventos",name: "EVENTOS", menu: new Array<Item>() }
+                        { id: 11,iddono: 2, key: "eventos",name: "EVENTOS", menu: new Array<Item>() }
                     )
                 },
                 {
                     id: 3, name: "EXPOSIÇÕES", menu: new Array<Item>(
                         { id: 12,iddono: 3, key: "artistas", name: "ARTISTAS", menu: new Array<Item>() },
                         { id: 13,iddono: 3, key: "locais", name: "LOCAIS", menu: new Array<Item>() },
-                        { id: 14,iddono: 3, key: "geteventos",name: "EVENTOS", menu: new Array<Item>() }
+                        { id: 14,iddono: 3, key: "eventos",name: "EVENTOS", menu: new Array<Item>() }
                     )
                 },
                 {
                     id: 4, name: "CINEMAS", menu: new Array<Item>(
                         { id: 15,iddono: 3, key: "locais", name: "LOCAIS", menu: new Array<Item>() },
-                        { id: 16,iddono: 3, key: "geteventos",name: "EVENTOS", menu: new Array<Item>() }
+                        { id: 16,iddono: 3, key: "eventos",name: "EVENTOS", menu: new Array<Item>() }
                     )
                 },
                 {

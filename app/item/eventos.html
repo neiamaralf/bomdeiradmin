@@ -1,0 +1,16 @@
+<ActionBar title="PESQUISAR CEP" class="action-bar">
+    <ActionItem ios.systemIcon="12" android.systemIcon="ic_menu_search" ios.position="right" (tap)="buscacep()"></ActionItem>
+</ActionBar>
+<StackLayout id="stck" class="page">
+    <TextField id="titulo" style="background-color: white" hint="Título" [(ngModel)]="evento.titulo"></TextField>
+    <TextField id="descricao" style="background-color: white" hint="Descrição" [(ngModel)]="evento.descricao"></TextField>
+
+    <ListPicker id="artistas" style="background-color: rgb(34, 32, 32);color: white" (selectedIndexChange)="selectedIndexChanged($event)" class="p-12">
+    </ListPicker>
+    <ListPicker id="estilos" style="background-color: rgb(34, 32, 32);color: white" (selectedIndexChange)="selectedIndexChanged($event)" class="p-12">
+    </ListPicker>
+    <ListPicker id="locais" style="background-color: rgb(34, 32, 32);color: white" (selectedIndexChange)="selectedIndexChanged($event)" class="p-12">
+    </ListPicker>
+
+
+</StackLayout>

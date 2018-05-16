@@ -1,9 +1,9 @@
 <ActionBar title="INSERIR LOCAL" class="action-bar">
-    <ActionItem class="fab-button-simple" ios.systemIcon="3" android.systemIcon="ic_menu_save" ios.position="right" (tap)="save()"></ActionItem>
+    <ActionItem id="actionitem" class="fab-button-simple" ios.systemIcon="3" android.systemIcon="ic_menu_save" ios.position="right" (tap)="save()"></ActionItem>
 </ActionBar>
 <StackLayout class="page">
 
-    <TextField style="background-color: white" hint="Nome" [(ngModel)]="dados.nome"></TextField>
+    <TextField id="nome" style="background-color: white" hint="Nome" [(ngModel)]="dados.nome"></TextField>
     <TextField style="background-color: white" hint="Número" keyboardType="number" [(ngModel)]="dados.numero"></TextField>
     <TextField style="background-color: white" hint="Complemento" [(ngModel)]="dados.complemento"></TextField>
     <TextField style="background-color: white" hint="Fone" keyboardType="phone" [(ngModel)]="dados.fone"></TextField>
