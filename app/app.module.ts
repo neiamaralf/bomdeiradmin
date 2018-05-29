@@ -13,7 +13,7 @@ import { CepComponent } from "./item/cep";
 import { EventosComponent } from "./item/eventos";
 import { BuscaCepComponent } from "./item/buscacep";
 import { LocaisComponent } from "./item/locais";
-
+import { BuscasComponent } from "./item/buscas";
 
 import { LoginComponent } from "./pages/login/login.component";
 import { NativeScriptHttpClientModule } from "nativescript-angular/http-client";
@@ -46,7 +46,8 @@ import { DbService } from "./shared/db/db.service";
         CepComponent,
         EventosComponent,
         BuscaCepComponent,
-        LocaisComponent
+        LocaisComponent,
+        BuscasComponent
     ],
     providers: [
         ItemService,

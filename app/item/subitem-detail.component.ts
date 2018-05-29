@@ -21,7 +21,6 @@ import { fromObject } from "data/observable";
 import { BindingOptions } from "ui/core/bindable";
 import { ObservableArray } from 'data/observable-array';
 import { Observable, EventData } from 'data/observable';
-
 import { ListView } from "ui/list-view"
 import { CepComponent } from "./cep"
 
@@ -35,7 +34,6 @@ export class SubItemDetailComponent {
     item: Item;
     isLoading = true;
 
-
     constructor(
         private itemService: ItemService,
         private route: ActivatedRoute,
@@ -47,35 +45,29 @@ export class SubItemDetailComponent {
         private routerExtensions: RouterExtensions
     ) {
         this.ngOnInit();
-        /*this.page.on("navigatingFrom", () => {
-            this.ngOnInit();
-           });*/
-        /* this.page.on("navigatingTo", () => {
-          this.ngOnInit();
-         });*/
-
     }
 
     obterlista() {
         this.isLoading = true;
-        this.db
-            .get("key=" + this.item.key + "&idcategoria=" + this.item.iddono + "&idadmin=" + this.userService.user.id)
-            .subscribe(res => {
-                // console.dir(res);
-                // console.log((<any>res).status);
-                if (res != null) {
-                    this.item.menu = [];
-                    (<any>res).result.forEach(row => {
-                        this.item.menu.push({
-                            key: (<any>res).key, name: row.nome, id: row.id, menu: null,
+        if (this.userService.user.super == 2) {
+            this.router.navigate(["/buscas/"+ this.item.id + "/" + this.item.iddono + "/" + this.userService.user.id+"/"+this.item.key]);
+        }
+        else
+            this.db
+                .get("key=" + this.item.key + "&idcategoria=" + this.item.iddono + "&idadmin=" + this.userService.user.id)
+                .subscribe(res => {
+                    if (res != null) {
+                        this.item.menu = [];
+                        (<any>res).result.forEach(row => {
+                            this.item.menu.push({
+                                key: (<any>res).key, name: row.nome, id: row.id, menu: null,
+                            });
                         });
-                    });
-                    //this.refresh();
-                    console.log("item...");
-                    console.dir(this.item);
-                }
-                this.isLoading = false;
-            });
+                        console.log("item...");
+                        console.dir(this.item);
+                    }
+                    this.isLoading = false;
+                });
     }
 
     add() {

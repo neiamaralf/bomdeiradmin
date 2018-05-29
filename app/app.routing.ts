@@ -10,6 +10,7 @@ import { CepComponent } from "./item/cep";
 import { EventosComponent } from "./item/eventos";
 import { BuscaCepComponent } from "./item/buscacep";
 import { LocaisComponent } from "./item/locais";
+import { BuscasComponent } from "./item/buscas";
 
 const routes: Routes = [
     { path: "", component: LoginComponent },
@@ -17,6 +18,7 @@ const routes: Routes = [
     { path: "item/:id", component: ItemDetailComponent },
     { path: "subitem/:id", component: SubItemDetailComponent },
     { path: "cep/:itemid/:idcategoria/:idadmin", component: CepComponent },
+    { path: "buscas/:itemid/:idcategoria/:idadmin/:key", component: BuscasComponent },
     { path: "eventos/:itemid/:acao/:idcategoria/:idadmin", component: EventosComponent },
     { path: "buscacep/:itemid/:idcategoria/:idadmin", component: BuscaCepComponent },
     { path: "locais/:itemid/:acao/:cep/:logradouro/:bairro/:localidade/:uf/:idcategoria/:idadmin", component: LocaisComponent },

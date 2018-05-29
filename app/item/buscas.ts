@@ -18,17 +18,21 @@ import { Item } from "./item";
 
 @Component({
   moduleId: module.id,
-  templateUrl: "./eventos.html",
+  templateUrl: "./buscas.html",
 })
-export class EventosComponent implements OnInit {
+export class BuscasComponent implements OnInit {
   public artistas: any[];
-  titulo: string = "ARTISTA"
-  public estilos: any[];
+  titulo: string = "ESTADO"
+  public cidades: any[];
   public locais: any[];
+  public estados: any[];
+  public bairros: any[];
   pagenumber: number = 0;
   curartista: any;
-  curestilo: any;
+  curcidade: any;
   curlocal: any;
+  curestado: any;
+  curbairro: any;
   isLoading: boolean = true;
   evento = fromObject({
     titulo: "",
@@ -40,7 +44,7 @@ export class EventosComponent implements OnInit {
     idcategoria: "",
     idadmin: ""
   });
-  
+
   item: Item;
 
   constructor(
@@ -50,45 +54,50 @@ export class EventosComponent implements OnInit {
     private route: ActivatedRoute,
     private page: Page) {
     this.artistas = [];
-    this.estilos = [];
+    this.cidades = [];
     this.locais = [];
-    
-    
+    this.estados = [];
+    this.bairros = [];
   }
 
   ngOnInit() {
-    this.params.set("acao", this.route.snapshot.params["acao"]);
-    var itemid=this.route.snapshot.params["itemid"];
+    this.params.set("key", this.route.snapshot.params["key"]);
+    var itemid = this.route.snapshot.params["itemid"];
     this.params.set("itemid", itemid);
-    this.item = this.itemService.getItem(itemid); 
+    this.item = this.itemService.getItem(itemid);
     this.params.set("idcategoria", this.route.snapshot.params["idcategoria"]);
     this.params.set("idadmin", this.route.snapshot.params["idadmin"]);
     this.loadlist(this.artistas, "artistas");
+    this.loadlist(this.estados, "estadosevt");
+  }
 
-    this.loadlist(this.estilos, "estilos");
-    this.loadlist(this.locais, "locais");
-
+  updateLstPickCurrent(lstpck) {
+    switch (lstpck.id) {
+      case "estadosevt":
+        this.curestado = lstpck.items[lstpck.selectedIndex];
+        console.dir(this.curestado);
+        break;
+      case "artistas":
+        this.curartista = lstpck.items[lstpck.selectedIndex];
+        console.dir(this.curartista);
+        break;
+      case "cidadesevt":
+        this.curcidade = lstpck.items[lstpck.selectedIndex];
+        console.dir(this.curcidade);
+        break;
+      case "locais":
+        this.curlocal = lstpck.items[lstpck.selectedIndex];
+        console.dir(this.curlocal);
+        break;
+      case "bairrosevt":
+        this.curbairro = lstpck.items[lstpck.selectedIndex];
+        console.dir(this.curbairro);
+        break;
+    }
   }
 
   selectedIndexChanged(arg) {
-    switch ((<any>arg.object).id) {
-      case "artistas":
-        this.curartista = (<any>arg.object).items[(<any>arg.object).selectedIndex];
-        console.dir(this.curartista);
-        break;
-      case "estilos":
-        this.curestilo = (<any>arg.object).items[(<any>arg.object).selectedIndex];
-
-
-        console.dir(this.curestilo);
-        break;
-      case "locais":
-        this.curlocal = (<any>arg.object).items[(<any>arg.object).selectedIndex];
-
-        console.dir(this.curlocal);
-        break;
-    }
-
+    this.updateLstPickCurrent(<any>arg.object);
   }
 
   public onSubmit(args) {
@@ -105,21 +114,38 @@ export class EventosComponent implements OnInit {
     var lstpick: ListPicker = <ListPicker>this.page.getViewById(lstpickid);
 
     lstpick.items = items;
+    this.updateLstPickCurrent(lstpick);
   }
 
   searchPhrase = "";
-  Searchhint = "Digite o artista";
+  Searchhint = "Digite o estado";
 
   public onTextChanged(args) {
     let searchBar = <SearchBar>args.object;
-    this.filterlistpicker(this.artistas, "artistas", searchBar.text);
+    switch (this.pagenumber) {
+      case 0:
+        this.filterlistpicker( this.estados, "estadosevt", searchBar.text);
+        break;
+      case 1:
+        this.filterlistpicker( this.cidades, "cidadesevt", searchBar.text);
+        console.dir(this.curcidade);
+        break;
+      case 2:
+        this.filterlistpicker( this.bairros, "bairrosevt", searchBar.text);
+        break;
+    }
+
     console.log("SearchBar text changed! New value: " + searchBar.text);
 
   }
 
   loadlist(array, key) {
     this.db
-      .get("key=" + key + "&idcategoria=" + this.params.get("idcategoria") + "&idadmin=" + this.params.get("idadmin"))
+      .get("key=" + key +
+        "&idcategoria=" + this.params.get("idcategoria") +
+        "&idadmin=" + this.params.get("idadmin") +
+        "&uf=" + (this.curestado == undefined ? "" : this.curestado.row.uf)+
+        "&cidade=" + (this.curcidade == undefined ? "" : this.curcidade.row.id))
       .subscribe(res => {
         if (res != null) {
           (<any>res).result.forEach(row => {
@@ -131,24 +157,8 @@ export class EventosComponent implements OnInit {
           var pickUF: ListPicker = <ListPicker>this.page.getViewById(key);
           pickUF.items = array;
           pickUF.selectedIndex = 0;
-          switch (key) {
-            case "artistas":
-              this.curartista = pickUF.items[pickUF.selectedIndex];
-
-
-              console.dir(this.curartista);
-              break;
-            case "estilos":
-              this.curestilo = pickUF.items[pickUF.selectedIndex];
-              console.dir(this.curestilo);
-              break;
-            case "locais":
-              this.curlocal = pickUF.items[pickUF.selectedIndex];
-              console.dir(this.curlocal);
-              break;
-          }
-
-          console.dir(array);
+          this.updateLstPickCurrent(pickUF);
+         // console.dir(array);
         }
         this.isLoading = false;
       });
@@ -158,12 +168,14 @@ export class EventosComponent implements OnInit {
     this.pagenumber++;
     switch (this.pagenumber) {
       case 1:
-        this.Searchhint = "Digite o estilo";
-        this.titulo = "ESTILOS"
+        this.Searchhint = "Digite a cidade";
+        this.titulo = "CIDADE";
+        this.loadlist(this.cidades, "cidadesevt");
         break;
       case 2:
-        this.Searchhint = "Digite o local";
-        this.titulo = "LOCAIS"
+        this.Searchhint = "Digite o bairro";
+        this.titulo = "BAIRRO"
+        this.loadlist(this.bairros, "bairrosevt");
         break;
       case 5:
         this.titulo = "DADOS DO EVENTO";
@@ -173,7 +185,7 @@ export class EventosComponent implements OnInit {
         }, 100);
         break;
       case 3:
-        this.titulo = "DATA"
+        this.titulo = "EVENTOS"
         break;
       case 4:
         this.titulo = "HORÁRIO"
@@ -188,7 +200,7 @@ export class EventosComponent implements OnInit {
         op: 'adicionar',
         key: 'eventos',
         idadmin: this.params.get("idadmin"),
-        idestilo: this.curestilo.row.id,
+        idestilo: this.curcidade.row.id,
         idartista: this.curartista.row.id,
         idcategoria: this.params.get("idcategoria"),
         idlocal: this.curlocal.row.id,
@@ -197,17 +209,17 @@ export class EventosComponent implements OnInit {
         descricao: this.evento.get("descricao"),
       })
       .subscribe(res => {
-       this.routerExtensions.backToPreviousPage();
+        this.routerExtensions.backToPreviousPage();
         this.item.menu.push({
-         key: (<any>res).key, name: (<any>res).result.nome, id: (<any>res).result.id, menu: null,
+          key: (<any>res).key, name: (<any>res).result.nome, id: (<any>res).result.id, menu: null,
         });
         this.item.menu.sort(function (a, b) {
-         var nameA = a.name.toLowerCase(), nameB = b.name.toLowerCase();
-         if (nameA < nameB)
-          return -1;
-         if (nameA > nameB)
-          return 1;
-         return 0;
+          var nameA = a.name.toLowerCase(), nameB = b.name.toLowerCase();
+          if (nameA < nameB)
+            return -1;
+          if (nameA > nameB)
+            return 1;
+          return 0;
         });
         console.dir(res);
         console.log((<any>res).status);
@@ -216,31 +228,31 @@ export class EventosComponent implements OnInit {
   }
 
   onPickerLoaded(args) {
-    let datePicker = <DatePicker>args.object;    
+    let datePicker = <DatePicker>args.object;
     datePicker.minDate = new Date(Date.now());
     datePicker.maxDate = new Date(2045, 4, 12);
-    this.date=datePicker.date.toISOString().slice(0, 10);
+    this.date = datePicker.date.toISOString().slice(0, 10);
   }
 
   onDateChanged(args) {
     let datePicker = <DatePicker>args.object;
-    this.date=datePicker.date.toISOString().slice(0, 10);
+    this.date = datePicker.date.toISOString().slice(0, 10);
     console.log(this.date);
   }
 
-  
+
   onDTPickerLoaded(args) {
     let timePicker = <TimePicker>args.object;
     timePicker.hour = 20;
     timePicker.minute = 0;
   }
 
-  time:string="20:00:00";
-  date:String="";
+  time: string = "20:00:00";
+  date: String = "";
 
   onTimeChanged(args) {
     let timePicker = <TimePicker>args.object;
-    this.time=timePicker.time.toTimeString().slice(0,8);
+    this.time = timePicker.time.toTimeString().slice(0, 8);
     console.log(this.time);
   }
 

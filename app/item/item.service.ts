@@ -86,8 +86,8 @@ export class ItemService {
         else if (this.userService.user.super == 2) {
             this.items.push(
                 {
-                    id: 1, name: "SHOWS", menu: new Array<Item>(
-                        { id: 5,iddono: 1, name: "REGIÃO", menu: new Array<Item>() },
+                    id: 1, name: "SHOWS", menu: new Array<Item>(                        
+                        { id: 5,iddono: 1, key:"regiao",name: "REGIÃO", menu: new Array<Item>() },
                         { id: 6,iddono: 1, key: "estilos", name: "ESTILO", menu: new Array<Item>() },
                         { id: 7,iddono: 1, key: "artistas", name: "BANDA", menu: new Array<Item>() },
                         { id: 8,iddono: 1, name: "LOCAL", menu: new Array<Item>() },

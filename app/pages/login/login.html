@@ -5,7 +5,7 @@
         <TextField visibility="{{admin?'visible':'hidden'}}" style="background-color: white" hint="Email" keyboardType="email" [(ngModel)]="userService.user.email" autocorrect="false" autocapitalizationType="none"></TextField>
         <TextField visibility="{{admin?'visible':'hidden'}}" style="background-color: white" hint="Senha" secure="true" [(ngModel)]="userService.user.senha"></TextField>
         <FlexboxLayout style="color:rgb(167, 141, 141);padding: 10" justifyContent="center" visibility="{{isLoggingIn?'visible':'hidden'}}">
-            <label style="margin-right: 10" text="Administrador"></label>
+            <Label style="margin-right: 10;color: black" text="Administrador" class="p-10"></Label>
             <Switch (tap)=showadmin() style="color:red"></Switch>
         </FlexboxLayout>
         <Button [text]="isLoggingIn ? 'Entrar' : 'Cadastrar'" class="submit-button" (tap)="submit()"></Button>

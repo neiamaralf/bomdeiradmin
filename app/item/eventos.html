@@ -1,16 +1,30 @@
-<ActionBar title="PESQUISAR CEP" class="action-bar">
-    <ActionItem ios.systemIcon="12" android.systemIcon="ic_menu_search" ios.position="right" (tap)="buscacep()"></ActionItem>
+<ActionBar [title]="titulo" class="action-bar">
+    <ActionItem visibility="{{pagenumber==5?'visible':'hidden'}}" ios.systemIcon="3" android.systemIcon="ic_menu_save" ios.position="right" (tap)="save()"></ActionItem>
+    <ActionItem visibility="{{pagenumber<5?'visible':'hidden'}}" effectiveMarginRight="5" effectivePaddingRight="5" class="fab-button-simple" ios.position="right" (tap)="onclick()">
+        <Label style="padding-right: 30" text="Continuar" color="red"></Label>
+    </ActionItem>
 </ActionBar>
 <StackLayout id="stck" class="page">
-    <TextField id="titulo" style="background-color: white" hint="Título" [(ngModel)]="evento.titulo"></TextField>
-    <TextField id="descricao" style="background-color: white" hint="Descrição" [(ngModel)]="evento.descricao"></TextField>
+    <SearchBar [hint]="Searchhint" style="background-color: cadetblue" visibility="{{pagenumber<3?'visible':'collapse'}}" [text]="searchPhrase" (textChange)="onTextChanged($event)" (submit)="onSubmit($event)" color="black" textFieldBackgroundColor="white"
+        textFieldHintColor="gray"></SearchBar>
+    <TextField id="titulo" visibility="{{pagenumber==5?'visible':'collapse'}}" style="background-color: white" hint="Título" [(ngModel)]="evento.titulo"></TextField>
+    <TextField id="descricao" visibility="{{pagenumber==5?'visible':'collapse'}}" style="background-color: white" hint="Descrição" [(ngModel)]="evento.descricao"></TextField>
 
-    <ListPicker id="artistas" style="background-color: rgb(34, 32, 32);color: white" (selectedIndexChange)="selectedIndexChanged($event)" class="p-12">
-    </ListPicker>
-    <ListPicker id="estilos" style="background-color: rgb(34, 32, 32);color: white" (selectedIndexChange)="selectedIndexChanged($event)" class="p-12">
-    </ListPicker>
-    <ListPicker id="locais" style="background-color: rgb(34, 32, 32);color: white" (selectedIndexChange)="selectedIndexChanged($event)" class="p-12">
-    </ListPicker>
 
+
+
+    <ListPicker id="artistas" visibility="{{pagenumber==0?'visible':'collapse'}}" style="background-color: rgb(34, 32, 32);color: white" (selectedIndexChange)="selectedIndexChanged($event)" class="p-12">
+    </ListPicker>
+    <ListPicker id="estilos" visibility="{{pagenumber==1?'visible':'collapse'}}" style="background-color: rgb(34, 32, 32);color: white" (selectedIndexChange)="selectedIndexChanged($event)" class="p-12">
+    </ListPicker>
+    <ListPicker id="locais" visibility="{{pagenumber==2?'visible':'collapse'}}" style="background-color: rgb(34, 32, 32);color: white" (selectedIndexChange)="selectedIndexChanged($event)" class="p-12">
+    </ListPicker>
+    <DatePicker style="background-color: white" visibility="{{pagenumber==3?'visible':'collapse'}}" (loaded)="onPickerLoaded($event)" (dateChange)="onDateChanged($event)" verticalAlignment="center"></DatePicker>
+    <TimePicker style="background-color: white" visibility="{{pagenumber==4?'visible':'collapse'}}" (loaded)="onDTPickerLoaded($event)" (timeChange)="onTimeChanged($event)" verticalAlignment="center" class="m-15"></TimePicker>
+    <Label visibility="{{pagenumber==5?'visible':'collapse'}}" text="{{'Artista : '+curartista.row.nome}}"></Label>
+    <Label visibility="{{pagenumber==5?'visible':'collapse'}}" text="{{'Estilo  : '+curestilo.row.nome}}"></Label>
+    <Label visibility="{{pagenumber==5?'visible':'collapse'}}" text="{{'Local   : '+curlocal.row.nome}}"></Label>
+    <Label visibility="{{pagenumber==5?'visible':'collapse'}}" text="{{'Data   : '+date}}"></Label>
+    <Label visibility="{{pagenumber==5?'visible':'collapse'}}" text="{{'Horário   : '+time}}"></Label>
 
 </StackLayout>
