@@ -3,8 +3,9 @@
     <ActionItem visibility="{{pagenumber<5?'visible':'hidden'}}" effectiveMarginRight="5" effectivePaddingRight="5" class="fab-button-simple" ios.position="right" (tap)="onclick()">
         <Label style="padding-right: 30" text="Continuar" color="red"></Label>
     </ActionItem>
+    <Button visibility="{{showwebview?'visible':'collapse'}}" class="btn btn-primary btn-active icon" row="0" col="0" text="voltar;" (tap)="goBack()"></Button>
 </ActionBar>
-<StackLayout id="stck" class="page">
+<StackLayout id="stck" class="page" visibility="{{!showwebview?'visible':'collapse'}}">
     <SearchBar [hint]="Searchhint" style="background-color: cadetblue" visibility="{{pagenumber<3?'visible':'collapse'}}" [text]="searchPhrase" (textChange)="onTextChanged($event)" (submit)="onSubmit($event)" color="black" textFieldBackgroundColor="white"
         textFieldHintColor="gray"></SearchBar>
     <ListPicker id="estadosevt" visibility="{{pagenumber==0?'visible':'collapse'}}" style="background-color: rgb(34, 32, 32);color: white" (selectedIndexChange)="selectedIndexChanged($event)" class="p-12">
@@ -14,8 +15,69 @@
     </ListPicker>
     <ListPicker id="bairrosevt" visibility="{{pagenumber==2?'visible':'collapse'}}" style="background-color: rgb(34, 32, 32);color: white" (selectedIndexChange)="selectedIndexChanged($event)" class="p-12">
     </ListPicker>
-    <DatePicker style="background-color: white" visibility="{{pagenumber==3?'visible':'collapse'}}" (loaded)="onPickerLoaded($event)" (dateChange)="onDateChanged($event)" verticalAlignment="center"></DatePicker>
-    <TimePicker style="background-color: white" visibility="{{pagenumber==4?'visible':'collapse'}}" (loaded)="onDTPickerLoaded($event)" (timeChange)="onTimeChanged($event)" verticalAlignment="center" class="m-15"></TimePicker>
+    <ListView visibility="{{pagenumber==3?'visible':'collapse'}}" id="eventosregiao" [items]="eventos" class="list-group">
+        <ng-template let-item="item">
+            <GridLayout class="list-group-item" rows="auto" columns="auto, *" (tap)="eventoclick(item)">
+                <Image row="0" col="0" src="{{ item.itemImage }}" class="thumb img-rounded"></Image>
+                <StackLayout row="0" col="1">
+                    <Label text="{{ item.row.nome }}" class="list-group-item-heading"></Label>
+                    <Label text="{{ item.row.descricao }}" class="list-group-item-text"></Label>
+                </StackLayout>
+            </GridLayout>
+
+        </ng-template>
+    </ListView>
+
+    <ScrollView visibility="{{pagenumber==4?'visible':'collapse'}}" sdkExampleTitle sdkToggleNavButton>
+        <GridLayout class="m-10" rows="auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto">
+            <StackLayout orientation="horizontal" class="h3 m-5" height="30" row="0">
+                <Label text="NOME: " style="font-weight: bold"></Label>
+                <Label text="{{ curevento.row.nome }}"></Label>
+            </StackLayout>
+            <StackLayout orientation="horizontal" class="h3 m-5" height="30" row="1">
+                <Label text="DESCRIÇÃO: " style="font-weight: bold"></Label>
+                <Label text="{{ curevento.row.descricao }}"></Label>
+            </StackLayout>
+            <StackLayout orientation="horizontal" class="h3 m-5" height="30" row="2">
+                <Label text="ESTILO: " style="font-weight: bold"></Label>
+                <Label text="{{ curevento.row.estilo }}"></Label>
+            </StackLayout>
+            <StackLayout orientation="horizontal" class="h3 m-5" height="30" row="3">
+                <Label text="ARTISTA: " style="font-weight: bold"></Label>
+                <Label text="{{ curevento.row.artista }}"></Label>
+            </StackLayout>
+            <StackLayout orientation="horizontal" class="h3 m-5" height="30" row="4">
+                <Label text="DATA: " style="font-weight: bold"></Label>
+                <Label text="{{ curevento.row.data }}"></Label>
+            </StackLayout>
+            <StackLayout orientation="horizontal" class="h3 m-5" height="30" row="5">
+                <Label text="HORÁRIO: " style="font-weight: bold"></Label>
+                <Label text="{{ curevento.row.time }}"></Label>
+            </StackLayout>
+            <StackLayout class="h3 m-5" row="6">
+                <StackLayout orientation="horizontal" class="h3 m-5">
+                    <Label text="LOCAL: " style="font-weight: bold"></Label>
+                    <Label text="{{ curevento.row.nomelocal }}"></Label>
+                </StackLayout>
+                <Label text="{{ curevento.row.logradouro+', '+curevento.row.numero+' - '+curevento.row.complemento }}"></Label>
+                <Label text="{{ curevento.row.cep+' - '+curevento.row.bairro+' - '+curevento.row.localidade+' - '+curevento.row.uf }}"></Label>
+            </StackLayout>
+            <StackLayout orientation="horizontal" class="h3 m-5" height="30" row="7" (tap)="abresite()">
+                <Label text="SITE: " style="font-weight: bold"></Label>
+                <Label text="{{ curevento.row.site }}" style="color:aqua " underline="true"></Label>
+            </StackLayout>
+            <StackLayout orientation="horizontal" class="h3 m-5" height="30" row="8">
+                <Label text="FONE: " style="font-weight: bold"></Label>
+                <Label text="{{ curevento.row.fone }}"></Label>
+            </StackLayout>
+
+        </GridLayout>
+    </ScrollView>
+    <DatePicker style="background-color: white" visibility="{{pagenumber==5?'visible':'collapse'}}" (loaded)="onPickerLoaded($event)" (dateChange)="onDateChanged($event)" verticalAlignment="center"></DatePicker>
+    <TimePicker style="background-color: white" visibility="{{pagenumber==6?'visible':'collapse'}}" (loaded)="onDTPickerLoaded($event)" (timeChange)="onTimeChanged($event)" verticalAlignment="center" class="m-15"></TimePicker>
 
 
+</StackLayout>
+<StackLayout visibility="{{showwebview?'visible':'collapse'}}">
+    <WebView row="1" #myWebView [src]="webViewSrc"></WebView>
 </StackLayout>

@@ -117,7 +117,7 @@ case "adduser":
   case "locais":
   $op=$json_obj->{'jsondata'}->{'op'};
   if($op=="adicionar"){
-    $descricao=$json_obj->{'jsondata'}->{'descricao'};
+    $nome=$json_obj->{'jsondata'}->{'nome'};
     $numero=$json_obj->{'jsondata'}->{'numero'};
     $complemento=$json_obj->{'jsondata'}->{'complemento'};
     $fone=$json_obj->{'jsondata'}->{'fone'};
@@ -129,8 +129,7 @@ case "adduser":
     $localidade=$json_obj->{'jsondata'}->{'localidade'};
     $uf=$json_obj->{'jsondata'}->{'uf'};
     $idadmin=$json_obj->{'jsondata'}->{'idadmin'};
-    $sql="INSERT INTO locais(descricao,numero,complemento,fone,email,site,cep,logradouro,bairro,localidade,uf,idadmin) \
-    VALUES('$descricao',$numero,'$complemento','$fone','$email','$site','$cep','$logradouro','$bairro','$localidade','$uf',$idadmin)";  
+    $sql="INSERT INTO locais(nome,numero,complemento,fone,email,site,cep,logradouro,bairro,localidade,uf,idadmin) VALUES('$nome',$numero,'$complemento','$fone','$email','$site','$cep','$logradouro','$bairro','$localidade','$uf',$idadmin)";  
     try {
       $qr=$pdo->query($sql);
       if($qr) {     
@@ -150,13 +149,13 @@ case "adduser":
   }
   else{  
   $id=$json_obj->{'jsondata'}->{'id'};  
-  $descricao=$json_obj->{'jsondata'}->{'descricao'};
+  $nome=$json_obj->{'jsondata'}->{'nome'};
   $numero=$json_obj->{'jsondata'}->{'numero'};
   $complemento=$json_obj->{'jsondata'}->{'complemento'};
   $fone=$json_obj->{'jsondata'}->{'fone'};
   $email=$json_obj->{'jsondata'}->{'email'};
   $site=$json_obj->{'jsondata'}->{'site'};
-  $sql="UPDATE locais SET descricao='$descricao',numero=$numero,complemento='$complemento',fone='$fone',email='$email',site='$site' WHERE id = $id";
+  $sql="UPDATE locais SET nome='$nome',numero=$numero,complemento='$complemento',fone='$fone',email='$email',site='$site' WHERE id = $id";
   try {
     $qr=$pdo->query($sql);
     if($qr) {     
@@ -173,6 +172,36 @@ case "adduser":
     echo json_encode(array('status'=>'erro','msg'=>$e->getMessage()));
   }
 }
+  break;
+  case 'eventos':
+  $op=$json_obj->{'jsondata'}->{'op'};
+  if($op=="adicionar"){  
+    $idadmin=$json_obj->{'jsondata'}->{'idadmin'};
+    $idestilo=$json_obj->{'jsondata'}->{'idestilo'};
+    $idartista=$json_obj->{'jsondata'}->{'idartista'};
+    $idcategoria=$json_obj->{'jsondata'}->{'idcategoria'};
+    $idlocal=$json_obj->{'jsondata'}->{'idlocal'};
+    $datahorario=$json_obj->{'jsondata'}->{'datahorario'};
+    $nome=$json_obj->{'jsondata'}->{'nome'};
+    $descricao=$json_obj->{'jsondata'}->{'descricao'};
+    $sql="INSERT INTO eventos(idadmin,idestilo,idartista,idcategoria,idlocal,datahorario,nome,descricao) VALUES($idadmin,$idestilo,$idartista,$idcategoria,$idlocal,'$datahorario','$nome','$descricao')";  
+    try {
+      $qr=$pdo->query($sql);
+      if($qr) {     
+          $stmt=$pdo->query("SELECT * FROM eventos WHERE idadmin = $idadmin AND id = (SELECT MAX(ID) FROM eventos WHERE idadmin = $idadmin)");
+          
+          if($row=$stmt->fetch(PDO::FETCH_OBJ)) {          
+            echo json_encode(array('status'=>'success','key'=>$key,'result'=>$row));
+          }          
+      }
+      else
+       echo json_encode(array('status'=>'erro','msg'=>'Problema desconhecido, contate o programador: neiamaralf@athena3d.com.br'));
+    }
+    catch(PDOException $e) {
+      echo json_encode(array('status'=>'erro','msg'=>$e->getMessage()));
+    }
+
+  }
   break;
 }
 

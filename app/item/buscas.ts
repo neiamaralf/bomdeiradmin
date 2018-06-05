@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit,ViewChild, ElementRef } from "@angular/core";
 import { RouterExtensions } from "nativescript-angular/router";
 import { DbService } from "../shared/db/db.service";
 import { ListPicker } from "tns-core-modules/ui/list-picker";
@@ -10,10 +10,13 @@ import { TextField } from "ui/text-field";
 import { ActivatedRoute } from "@angular/router";
 import { TimePicker } from "ui/time-picker";
 import { DatePicker } from "ui/date-picker";
-
+import { ObservableArray } from "data/observable-array";
+import { Observable } from "data/observable";
 import { SearchBar } from "ui/search-bar";
 import { ItemService } from "./item.service";
 import { Item } from "./item";
+import * as utils from "utils/utils";
+import { WebView, LoadEventData } from "ui/web-view";
 
 
 @Component({
@@ -27,17 +30,16 @@ export class BuscasComponent implements OnInit {
   public locais: any[];
   public estados: any[];
   public bairros: any[];
+  public eventos: any[];
   pagenumber: number = 0;
   curartista: any;
   curcidade: any;
   curlocal: any;
   curestado: any;
   curbairro: any;
-  isLoading: boolean = true;
-  evento = fromObject({
-    titulo: "",
-    descricao: ""
-  });
+  curevento: any;
+  isLoading: boolean = true;  
+  showwebview:boolean=false;
 
   params = fromObject({
     itemid: 0,
@@ -46,21 +48,39 @@ export class BuscasComponent implements OnInit {
   });
 
   item: Item;
+  @ViewChild("myWebView") webViewRef: ElementRef;
 
   constructor(
     private itemService: ItemService,
     private routerExtensions: RouterExtensions,
     private db: DbService,
     private route: ActivatedRoute,
-    private page: Page) {
+    private page: Page,
+  private webview: WebView) {
+   
     this.artistas = [];
     this.cidades = [];
     this.locais = [];
     this.estados = [];
     this.bairros = [];
+    this.eventos = [];
   }
 
+
+
   ngOnInit() {
+    this.webview=this.webViewRef.nativeElement;
+    this.webview.on(WebView.loadFinishedEvent, function (args: LoadEventData) {
+      let message;
+      if (!args.error) {
+          message = "WebView finished loading of " + args.url;
+      } else {
+          message = "Error loading " + args.url + ": " + args.error;
+      }
+
+      //label.text = message;
+      console.log("WebView message - " + message);
+  });
     this.params.set("key", this.route.snapshot.params["key"]);
     var itemid = this.route.snapshot.params["itemid"];
     this.params.set("itemid", itemid);
@@ -124,14 +144,14 @@ export class BuscasComponent implements OnInit {
     let searchBar = <SearchBar>args.object;
     switch (this.pagenumber) {
       case 0:
-        this.filterlistpicker( this.estados, "estadosevt", searchBar.text);
+        this.filterlistpicker(this.estados, "estadosevt", searchBar.text);
         break;
       case 1:
-        this.filterlistpicker( this.cidades, "cidadesevt", searchBar.text);
+        this.filterlistpicker(this.cidades, "cidadesevt", searchBar.text);
         console.dir(this.curcidade);
         break;
       case 2:
-        this.filterlistpicker( this.bairros, "bairrosevt", searchBar.text);
+        this.filterlistpicker(this.bairros, "bairrosevt", searchBar.text);
         break;
     }
 
@@ -144,8 +164,9 @@ export class BuscasComponent implements OnInit {
       .get("key=" + key +
         "&idcategoria=" + this.params.get("idcategoria") +
         "&idadmin=" + this.params.get("idadmin") +
-        "&uf=" + (this.curestado == undefined ? "" : this.curestado.row.uf)+
-        "&cidade=" + (this.curcidade == undefined ? "" : this.curcidade.row.id))
+        "&uf=" + (this.curestado == undefined ? "" : this.curestado.row.uf) +
+        "&cidade=" + (this.curcidade == undefined ? "" : this.curcidade.row.id)+
+        "&bairro=" + (this.curbairro == undefined ? "" : this.curbairro.row.nome))
       .subscribe(res => {
         if (res != null) {
           (<any>res).result.forEach(row => {
@@ -158,7 +179,7 @@ export class BuscasComponent implements OnInit {
           pickUF.items = array;
           pickUF.selectedIndex = 0;
           this.updateLstPickCurrent(pickUF);
-         // console.dir(array);
+          // console.dir(array);
         }
         this.isLoading = false;
       });
@@ -177,6 +198,10 @@ export class BuscasComponent implements OnInit {
         this.titulo = "BAIRRO"
         this.loadlist(this.bairros, "bairrosevt");
         break;
+      case 3:
+        this.titulo = "EVENTOS";
+        this.loadlist(this.eventos, "eventosregiao");
+        break;
       case 5:
         this.titulo = "DADOS DO EVENTO";
         var txt: TextField = <TextField>this.page.getViewById("titulo");
@@ -184,9 +209,7 @@ export class BuscasComponent implements OnInit {
           txt.focus();
         }, 100);
         break;
-      case 3:
-        this.titulo = "EVENTOS"
-        break;
+
       case 4:
         this.titulo = "HORÁRIO"
         break;
@@ -194,39 +217,36 @@ export class BuscasComponent implements OnInit {
     this.searchPhrase = "";
   }
 
-  save() {
-    this.db
-      .put({
-        op: 'adicionar',
-        key: 'eventos',
-        idadmin: this.params.get("idadmin"),
-        idestilo: this.curcidade.row.id,
-        idartista: this.curartista.row.id,
-        idcategoria: this.params.get("idcategoria"),
-        idlocal: this.curlocal.row.id,
-        datahorario: this.date + " " + this.time,
-        nome: this.evento.get("titulo"),
-        descricao: this.evento.get("descricao"),
-      })
-      .subscribe(res => {
-        this.routerExtensions.backToPreviousPage();
-        this.item.menu.push({
-          key: (<any>res).key, name: (<any>res).result.nome, id: (<any>res).result.id, menu: null,
-        });
-        this.item.menu.sort(function (a, b) {
-          var nameA = a.name.toLowerCase(), nameB = b.name.toLowerCase();
-          if (nameA < nameB)
-            return -1;
-          if (nameA > nameB)
-            return 1;
-          return 0;
-        });
-        console.dir(res);
-        console.log((<any>res).status);
-      });
+  goBack() {
+    if (this.webview.canGoBack) {
+      this.webview.goBack();
+    }
+    this.webview.src="";
+    this.showwebview=false;
+}
 
+  abresite(){
+    this.webview.src=this.curevento.row.site;
+    this.showwebview=true;
   }
 
+  eventoclick(item) {
+    this.curevento = item;
+    var t = this.curevento.row.datahorario.split(/[- :]/);
+    var data = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4], t[5]));
+    var semana = ["Domingo", "Segunda-Feira", "Terça-Feira", "Quarta-Feira", "Quinta-Feira", "Sexta-Feira", "Sábado"];
+    var diames=data.getUTCDate()<10?"0"+data.getUTCDate():data.getUTCDate();
+    var mes=data.getUTCMonth()<9?"0"+(data.getUTCMonth() + 1):(data.getUTCMonth() + 1);
+    var hora=data.getUTCHours()<10?"0"+data.getUTCHours():data.getUTCHours();
+    var minutos=data.getUTCMinutes()<10?"0"+data.getUTCMinutes():data.getUTCMinutes();
+    this.curevento.row.data = diames + "\\" + mes + "\\" + data.getUTCFullYear() + " - " + semana[data.getDay()];
+    this.curevento.row.time=hora+":"+minutos;
+    console.dir(this.curevento);
+
+    console.dir(data);
+    
+  }
+ 
   onPickerLoaded(args) {
     let datePicker = <DatePicker>args.object;
     datePicker.minDate = new Date(Date.now());

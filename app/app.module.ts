@@ -20,6 +20,7 @@ import { NativeScriptHttpClientModule } from "nativescript-angular/http-client";
 import { User } from "./shared/user/user";
 import { UserService } from "./shared/user/user.service";
 import { DbService } from "./shared/db/db.service";
+import { WebView, LoadEventData } from "ui/web-view";
 
 // Uncomment and add to NgModule imports if you need to use two-way binding
 // import { NativeScriptFormsModule } from "nativescript-angular/forms";
@@ -53,7 +54,7 @@ import { DbService } from "./shared/db/db.service";
         ItemService,
         DbService,
         User,
-        UserService
+        UserService,WebView
     ],
     schemas: [
         NO_ERRORS_SCHEMA
