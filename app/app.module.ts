@@ -21,6 +21,12 @@ import { User } from "./shared/user/user";
 import { UserService } from "./shared/user/user.service";
 import { DbService } from "./shared/db/db.service";
 import { WebView, LoadEventData } from "ui/web-view";
+import * as platform from "platform";
+declare var GMSServices: any;
+
+if (platform.isIOS) { 
+  GMSServices.provideAPIKey("AIzaSyCpX-cfRtq9NrAeY1DRUs1uoLxeMwK_a4I");
+}
 
 // Uncomment and add to NgModule imports if you need to use two-way binding
 // import { NativeScriptFormsModule } from "nativescript-angular/forms";
