@@ -1,0 +1,77 @@
+/*
+In NativeScript, the app.css file is where you place CSS rules that
+you would like to apply to your entire application. Check out
+http://docs.nativescript.org/ui/styling for a full list of the CSS
+selectors and properties you can use to style UI components.
+
+/*
+In many cases you may want to use the NativeScript core theme instead
+of writing your own CSS rules. For a full list of class names in the theme
+refer to http://docs.nativescript.org/ui/theme.
+
+@import '~nativescript-theme-core/css/aqua.css';
+@import '~nativescript-theme-core/css/blue.css';
+@import '~nativescript-theme-core/css/brown.css';
+@import '~nativescript-theme-core/css/forest.css';
+@import '~nativescript-theme-core/css/grey.css';
+@import '~nativescript-theme-core/css/lemon.css';
+@import '~nativescript-theme-core/css/lime.css';
+@import '~nativescript-theme-core/css/orange.css';
+@import '~nativescript-theme-core/css/purple.css';
+@import '~nativescript-theme-core/css/ruby.css';
+@import '~nativescript-theme-core/css/sky.css';
+@import '~nativescript-theme-core/css/core.light.css';
+@import '~nativescript-theme-core/css/core.dark.css';
+
+*/
+
+@import '~nativescript-theme-core/css/core.dark.css';
+.listitem {
+    background-color: rgb(129, 131, 40);
+    color: whitesmoke;
+    text-align: left;
+    vertical-align: center;
+}
+
+.roundbt {
+    text-align: left;
+    border-radius: 10;
+    margin-top: 10;
+    background-color: rgb(105, 117, 115);
+}
+
+.roundbt1 {
+    z-index: 1;
+    padding: 0;
+    margin-left: 0;
+    color: white;
+    border-radius: 100;
+    background-color: rgb(204, 0, 17);
+}
+
+.roundbt2 {
+    margin-left: 10;
+    padding: 0;
+    border-radius: 15;
+    background-color: rgb(204, 0, 17);
+    color: white;
+}
+
+.fab-button {
+    height: 70;
+    width: 70;
+    /* this is required on iOS - Android does not require width so you might need to adjust styles */
+    margin: 15;
+    background-color: #ff4081;
+    horizontal-align: right;
+    vertical-align: bottom;
+}
+
+.fab-button-simple {
+    color: white;
+    background-color: #CB1D00;
+}
+
+Label {
+    color: white;
+}
